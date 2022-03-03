@@ -7,10 +7,6 @@ router.use("/session", sessionRouter);
 
 router.use("/users", usersRouter);
 
-router.post("/test", (req, res) => {
-  res.json({ requestBody: req.body });
-});
-
 // ↓=============TESTING ROUTES=================↓
 
 // router.get(
@@ -36,6 +32,10 @@ router.post("/test", (req, res) => {
 // const { requireAuth } = require("../../utils/auth.js");
 // router.get("/require-auth", requireAuth, (req, res) => {
 //   return res.json(req.user);
+// });
+
+// router.post("/test", (req, res) => {
+//   res.json({ requestBody: req.body });
 // });
 
 // ↑=============TESTING ROUTES=================↑
