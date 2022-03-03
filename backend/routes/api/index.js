@@ -1,12 +1,34 @@
 const router = require("express").Router();
+const asyncHandler = require("express-async-handler");
 
-router.get("/test", function (req, res) {
-  console.log("test");
-  res.json({ test: "Hi!!" });
+const { setTokenCookie } = require("../../utils/auth.js");
+const { User } = require("../../db/models");
+// ↓=============TESTING ROUTES=================↓
+router.get(
+  "/set-token-cookie",
+  asyncHandler(async (_req, res) => {
+    const user = await User.findOne({
+      where: {
+        username: "FakeUser1",
+      },
+    });
+    setTokenCookie(res, user);
+    return res.json({ user });
+  })
+);
+
+// GET /api/restore-user
+const { restoreUser } = require("../../utils/auth.js");
+router.get("/restore-user", restoreUser, (req, res) => {
+  return res.json(req.user);
 });
 
-router.post("/test", function (req, res) {
-  res.json({ requestBody: req.body });
+// GET /api/require-auth
+const { requireAuth } = require("../../utils/auth.js");
+router.get("/require-auth", requireAuth, (req, res) => {
+  return res.json(req.user);
 });
+
+// ↑=============TESTING ROUTES=================↑
 
 module.exports = router;

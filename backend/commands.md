@@ -33,3 +33,25 @@ psql -c "CREATE USER <username> PASSWORD '<password>' CREATEDB"
 ```
 npx dotenv sequelize db:create
 ```
+
+**Generate User Table Migration**
+
+```
+npx sequelize model:generate --name User --attributes username:string,email:string,hashedPassword:string
+```
+
+**Generate User Seed**
+
+```
+npx sequelize seed:generate --name demo-user
+```
+
+**DB COMMANDS**
+
+```
+npx dotenv sequelize db:migrate
+npx dotenv sequelize db:seed:all
+npx dotenv sequelize db:seed:undo:all
+npx dotenv sequelize db:migrate:undo
+
+```
