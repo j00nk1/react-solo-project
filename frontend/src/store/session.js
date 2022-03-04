@@ -21,6 +21,7 @@ export const removeSessionUser = () => {
   };
 };
 
+// ---------------- Thunk Actions -------------
 export const loginUser = user => async dispatch => {
   const { credential, password } = user;
 
@@ -36,7 +37,15 @@ export const loginUser = user => async dispatch => {
   return data;
 };
 
-// ----------- Reducer -------------
+export const restoreUser = () => async dispatch => {
+  const res = await csrfFetch("/api/session");
+
+  const data = await res.json();
+  dispatch(setSessionUser(data.user));
+  return res;
+};
+
+// --------------- Reducer ----------------
 const initialState = { user: null };
 
 const sessionReducer = (state = initialState, action) => {
