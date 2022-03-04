@@ -15,5 +15,5 @@ npm install js-cookie
 **Testing in the browser console**
 
 ```
-store.dispatch(sessionActions.loginUser({credential: "Demo-User", password:"password"}))
+store.dispatch(sessionActions.login({credential: "Demo-User", password:"password"}))
 ```

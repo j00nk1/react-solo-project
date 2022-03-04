@@ -35,7 +35,7 @@ function SignupFormPage() {
   const demoLogin = e => {
     e.preventDefault();
     return dispatch(
-      sessionActions.loginUser({
+      sessionActions.login({
         credential: "Demo-User",
         password: "password",
       })

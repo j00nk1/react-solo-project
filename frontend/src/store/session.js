@@ -4,34 +4,36 @@
 import { csrfFetch } from "./csrf";
 
 // -------- Constants --------
-const SET_SESSION_USER = "session/SET_SESSION_USER";
-const REMOVE_SESSION_USER = "session/REMOVE_SESSION_USER";
+const SET_USER = "session/setUser";
+const REMOVE_USER = "session/removeUser";
 
 // ---------------- Action Creators -----------
-export const setSessionUser = user => {
+const setUser = user => {
   return {
-    type: SET_SESSION_USER,
-    user,
+    type: SET_USER,
+    payload: user,
   };
 };
 
-export const removeSessionUser = () => {
+const removeUser = () => {
   return {
-    type: REMOVE_SESSION_USER,
+    type: REMOVE_USER,
   };
 };
 
 // ---------------- Thunk Actions -------------
-export const loginUser = user => async dispatch => {
+export const login = user => async dispatch => {
   const { credential, password } = user;
-
-  const res = await csrfFetch("/api/session", {
+  const response = await csrfFetch("/api/session", {
     method: "POST",
-    body: JSON.stringify({ credential, password }),
+    body: JSON.stringify({
+      credential,
+      password,
+    }),
   });
-  const data = await res.json();
-  dispatch(setSessionUser(data));
-  return data;
+  const data = await response.json();
+  dispatch(setUser(data.user));
+  return response;
 };
 
 export const restoreUser = () => async dispatch => {
@@ -40,7 +42,7 @@ export const restoreUser = () => async dispatch => {
   const data = await res.json();
   console.log(data.user);
   if (!data.user) return;
-  dispatch(setSessionUser(data.user));
+  dispatch(setUser(data.user));
   return res;
 };
 
@@ -52,15 +54,15 @@ export const signupUser = user => async dispatch => {
     body: JSON.stringify({ username, email, password }),
   });
   const data = await res.json();
-  dispatch(setSessionUser(data.user));
+  dispatch(setUser(data.user));
   return data;
 };
 
-export const logoutUser = () => async dispatch => {
+export const logout = () => async dispatch => {
   const res = await csrfFetch("/api/session", {
     method: "DELETE",
   });
-  dispatch(removeSessionUser());
+  dispatch(removeUser());
   return res;
 };
 
@@ -70,12 +72,14 @@ const initialState = { user: null };
 const sessionReducer = (state = initialState, action) => {
   let newState;
   switch (action.type) {
-    case SET_SESSION_USER:
-      newState = { ...state };
-      newState.user = action.user;
+    case SET_USER:
+      newState = Object.assign({}, state);
+      newState.user = action.payload;
       return newState;
-    case REMOVE_SESSION_USER:
-      return { ...state, user: null };
+    case REMOVE_USER:
+      newState = Object.assign({}, state);
+      newState.user = null;
+      return newState;
     default:
       return state;
   }

@@ -5,7 +5,7 @@ import * as sessionActions from "../../store/session";
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
-
+  // const { username, email } = user?.user;
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
@@ -19,13 +19,13 @@ function ProfileButton({ user }) {
     };
 
     document.addEventListener("click", closeMenu);
-    console.log(user);
+
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu, user]);
 
   const logout = e => {
     e.preventDefault();
-    dispatch(sessionActions.logoutUser());
+    dispatch(sessionActions.logout());
   };
 
   return (
@@ -33,7 +33,7 @@ function ProfileButton({ user }) {
       <button onClick={openMenu}>
         <i className="fas fa-user-circle" />
       </button>
-      {showMenu && (
+      {showMenu && user && (
         <ul className="profile-dropdown">
           <li>{user.username}</li>
           <li>{user.email}</li>
