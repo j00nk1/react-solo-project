@@ -1,0 +1,53 @@
+/* 
+border color #91c1e5
+*/
+.header_container {
+  height: 50px;
+  border-bottom: 1px solid #91c1e5;
+}
+
+.nav_header {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 10px;
+}
+
+.nav_right > ul {
+  align-self: center;
+}
+
+.header_right_user {
+  display: flex;
+  position: relative;
+}
+
+.header_right_user > button {
+  margin-bottom: 5px;
+  width: 3em;
+}
+
+.profile-dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  right: 0;
+  top: 45px;
+  border: 1px solid #91c1e5;
+  background-color: antiquewhite;
+  border-radius: 4px;
+  gap: 5px;
+  padding: 5px;
+}
+
+.profile-dropdown li button {
+  width: 100%;
+}
+
+.logo {
+  height: 100%;
+}
+
+.nav_right_container > li {
+  align-self: center;
+}

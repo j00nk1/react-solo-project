@@ -21,8 +21,15 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
+          <Route exact path="/">
+            <h1>Welcome to YEN (a.k.a. You Ever Note?)</h1>
+          </Route>
           <Route path="/signup">
             <SignupFormPage />
+          </Route>
+          <Route path="*">
+            <h2>Page Not Found</h2>
+            {/*TODO:Make Error handling components <Error /> */}
           </Route>
         </Switch>
       )}

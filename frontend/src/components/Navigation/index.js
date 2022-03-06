@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import LoginFormModal from "../LoginFormModal";
 import "./Navigation.css";
+import logo from "./images/logo.png";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
@@ -14,25 +15,29 @@ function Navigation({ isLoaded }) {
   } else {
     sessionLinks = (
       <>
-        <li>
+        <li style={{ align: "red" }}>
           <LoginFormModal />
         </li>
         <li>
-          <NavLink to="/signup">Sign Up</NavLink>
+          <button>
+            <NavLink to="/signup">Sign Up</NavLink>
+          </button>
         </li>
       </>
     );
   }
 
   return (
-    <ul className="header">
-      <li>
-        <NavLink exact to="/" className="navLeft">
-          Home
-        </NavLink>
-      </li>
-      {isLoaded && sessionLinks}
-    </ul>
+    <header className="header_container">
+      <ul className="nav_header">
+        <li className="nav_left">
+          <NavLink exact to="/">
+            <img src={logo} alt="yen-logo" className="logo" />
+          </NavLink>
+        </li>
+        <ul class="nav_right_container">{isLoaded && sessionLinks}</ul>
+      </ul>
+    </header>
   );
 }
 
