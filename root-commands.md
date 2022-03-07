@@ -29,7 +29,7 @@ git push heroku login-branch:main
 or
 
 ```
-git push heroku master
+git push heroku main
 ```
 
 ## Migrate & seed data in heroku
