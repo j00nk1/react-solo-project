@@ -6,6 +6,7 @@ function UserHome() {
   const sessionUser = useSelector(state => state?.session?.user);
   let id, username;
   try {
+    // TODO: check the user with user id and limit the access to other user's page
     id = sessionUser.id;
     username = sessionUser.username;
 

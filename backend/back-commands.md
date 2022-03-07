@@ -46,6 +46,18 @@ npx sequelize model:generate --name User --attributes username:string,email:stri
 npx sequelize seed:generate --name demo-user
 ```
 
+**Generate Notebook Migration**
+
+```
+npx sequelize model:generate --name Notebook --attributes userId:integer,title:string,isMain:boolean
+```
+
+**Generate Notebook Seed**
+
+```
+npx sequelize seed:generate --name notebook
+```
+
 **DB COMMANDS**
 
 ```
