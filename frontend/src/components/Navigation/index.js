@@ -15,7 +15,7 @@ function Navigation({ isLoaded }) {
   } else {
     sessionLinks = (
       <>
-        <li style={{ align: "red" }}>
+        <li>
           <LoginFormModal />
         </li>
         <li>

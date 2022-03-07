@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/j00nk1/react-solo-project/issues"
   },
-  "homepage": "https://github.com/j00nk1/react-solo-project#readme"
+  "homepage": "https://github.com/j00nk1/react-solo-project#readme",
+  "dependencies": {
+    "reselect": "^4.1.5"
+  }
 }

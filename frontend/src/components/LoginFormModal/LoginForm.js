@@ -27,15 +27,15 @@ function LoginForm() {
     if (info?.user?.id) return history.push(`/users/${info.user.id}`);
   };
 
-  const demoLogin = e => {
+  const demoLogin = async e => {
     e.preventDefault();
-    history.push(`/users/1`);
-    return dispatch(
+    await dispatch(
       sessionActions.login({
         credential: "Demo-User",
         password: "password",
       })
     );
+    return history.push(`/users/1`);
   };
 
   return (

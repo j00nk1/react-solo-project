@@ -25,10 +25,10 @@ function App() {
           <Route exact path="/">
             <Landing />
           </Route>
-          <Route path="/signup">
+          <Route exact path="/signup">
             <SignupFormPage />
           </Route>
-          <Route path="/users/:userId">
+          <Route path="/users/:userId" isLoaded={isLoaded}>
             <UserHome />
           </Route>
           <Route path="*">
