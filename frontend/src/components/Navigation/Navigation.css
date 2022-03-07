@@ -48,6 +48,10 @@ border color #91c1e5
   height: 100%;
 }
 
+.nav_right_container {
+  gap: 20px;
+}
+
 .nav_right_container > li {
   align-self: center;
 }

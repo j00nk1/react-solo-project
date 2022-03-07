@@ -20,6 +20,10 @@ export function ModalProvider({ children }) {
   );
 }
 
+export const backgroundImage = {
+  backgroundImage: `url(${process.env.PUBLIC_URL + "/images/note.png"})`,
+};
+
 export function Modal({ onClose, children }) {
   const modalNode = useContext(ModalContext);
   if (!modalNode) return null;
@@ -27,7 +31,9 @@ export function Modal({ onClose, children }) {
   return ReactDOM.createPortal(
     <div id="modal">
       <div id="modal-background" onClick={onClose} />
-      <div id="modal-content">{children}</div>
+      <div id="modal-content" style={backgroundImage}>
+        {children}
+      </div>
     </div>,
     modalNode
   );
