@@ -68,10 +68,12 @@ input {
 button {
   display: block;
   background: #91c1e5;
-  color: #ffffff;
-  font-weight: bold;
+  border: none;
   border-radius: 10px;
   box-shadow: 5px 5px 0px 0px #dedede;
+  color: #ffffff;
+  font-weight: bold;
+  height: 30px;
   transition: all 0.2s ease;
 }
 
@@ -85,9 +87,17 @@ button:hover {
   box-shadow: none;
 }
 
+.btn_alert {
+  background-color: #ff265b;
+}
+
+.btn_alert:hover {
+  background-color: red;
+}
+
 .error {
   color: red;
   font-weight: bold;
-  /* display: block; */
   margin-bottom: 15px;
+  flex-direction: column;
 }

@@ -85,7 +85,9 @@ function SignupFormPage() {
           required
         />
       </label>
-      <button type="submit">Sign Up</button>
+      <button type="submit" className="signup_btn">
+        Sign Up
+      </button>
       <button onClick={demoLogin}>Demo User</button>
     </form>
   );

@@ -25,6 +25,7 @@ border color #91c1e5
 .header_right_user > button {
   margin-bottom: 5px;
   width: 3em;
+  height: 90%;
 }
 
 .profile-dropdown {
