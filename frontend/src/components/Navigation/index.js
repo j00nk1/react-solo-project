@@ -35,7 +35,7 @@ function Navigation({ isLoaded }) {
             <img src={logo} alt="yen-logo" className="logo" />
           </NavLink>
         </li>
-        <ul class="nav_right_container">{isLoaded && sessionLinks}</ul>
+        <ul className="nav_right_container">{isLoaded && sessionLinks}</ul>
       </ul>
     </header>
   );

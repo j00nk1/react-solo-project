@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useDispatch } from "react-redux";
 // -------------- Components --------------
-// import LoginFormPage from "./components/LoginFormPage";
+import Landing from "./components/Landing";
 import SignupFormPage from "./components/SignupFormPage";
 import Navigation from "./components/Navigation";
+import UserHome from "./components/UserHome";
 
 // ------------- Store files --------------
 import * as sessionActions from "./store/session";
@@ -22,10 +23,13 @@ function App() {
       {isLoaded && (
         <Switch>
           <Route exact path="/">
-            <h1>Welcome to YEN (a.k.a. You Ever Note?)</h1>
+            <Landing />
           </Route>
           <Route path="/signup">
             <SignupFormPage />
+          </Route>
+          <Route path="/users/:userId">
+            <UserHome />
           </Route>
           <Route path="*">
             <h2>Page Not Found</h2>
