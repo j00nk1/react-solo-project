@@ -39,16 +39,9 @@ module.exports = (sequelize, DataTypes) => {
     return await Note.findByPk(newNote.id);
   };
 
-  Note.editNote = async function ({ noteId, title, content }) {
-    const note = await Note.findByPk(noteId);
+  Note.editNote = async function ({ note, title, content }) {
     note.update({ title, content });
     return await note;
-  };
-
-  Note.deleteNote = async function (noteId) {
-    const note = await Note.findByPk(noteId);
-    await note.destroy();
-    return;
   };
 
   return Note;
