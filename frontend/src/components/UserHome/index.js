@@ -1,20 +1,24 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 
 function UserHome() {
   const sessionUser = useSelector(state => state?.session?.user);
+  const { userId } = useParams();
   let id, username;
+
   try {
-    // TODO: check the user with user id and limit the access to other user's page
+    if (!sessionUser) throw new Error("Please log in");
     id = sessionUser.id;
     username = sessionUser.username;
 
-    if (!sessionUser) throw new Error();
+    if (id !== +userId)
+      throw new Error("You are not authorized to see this page");
   } catch (e) {
-    console.error("Please log in.", e);
+    console.error(e);
 
-    return <Redirect to="/error" />;
+    // TODO: Make an error component and render the error message(passed as prop)
+    return <Redirect to="/error" error={e} />;
   }
 
   return <div>This is {username}'s Home</div>;
