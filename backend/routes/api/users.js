@@ -43,6 +43,7 @@ router.post(
 
     return res.json({
       user,
+      newNotebook,
     });
   })
 );
