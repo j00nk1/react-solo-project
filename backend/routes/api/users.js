@@ -4,7 +4,7 @@ const { check } = require("express-validator");
 
 const { handleValidationErrors } = require("../../utils/validation");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const { User } = require("../../db/models");
+const { User, Notebook, Note } = require("../../db/models");
 
 const router = express.Router();
 // ------------------- Validations ------------------------
@@ -26,6 +26,18 @@ const validateSignup = [
   handleValidationErrors,
 ];
 
+// Note Validation
+const validateNote = [
+  check("title")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide your note's title")
+    .isLength({ max: 256 })
+    .withMessage("Title must be shorter than 256 characters"),
+  check("content")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide your note's content"),
+];
+
 // --------- Route Handlers /api/users/ ------------------
 // Sign up
 router.post(
@@ -37,9 +49,147 @@ router.post(
 
     await setTokenCookie(res, user);
 
+    const { id } = await user;
+
+    const newNotebook = await Notebook.generateMain(username, id);
+
     return res.json({
       user,
+      newNotebook,
     });
+  })
+);
+
+// ------------- NOTEBOOK routes /api/users/:userId/notebooks ------------------
+// READ Notebooks
+router.get(
+  "/:userId(\\d+)/notebooks/",
+  asyncHandler(async (req, res) => {
+    const { userId } = await req.params;
+
+    // TODO: Grab all notes and send it to frontend
+
+    res.json({ userId });
+  })
+);
+
+// --------NOTE Routes /api/users/:userId/notebooks/:notebookId/notes/----------
+// READ notes
+router.get(
+  "/:userId/notebooks/:notebookId/notes/",
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId } = await req.params;
+
+    const notes = await Note.findAll({
+      where: {
+        userId,
+        notebookId,
+      },
+    });
+
+    if (notes.length > 0) {
+      return res.json({ notes });
+    } else {
+      const error = new Error("We could not find the notes");
+      error.status = 404;
+      next(error);
+    }
+  })
+);
+
+// CREATE a note
+router.post(
+  "/:userId/notebooks/:notebookId/notes/",
+  validateNote,
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId } = await req.params;
+    const notebook = await Notebook.findOne({
+      where: {
+        id: notebookId,
+        userId,
+      },
+    });
+
+    const { title, content } = await req.body;
+
+    if (notebook) {
+      const note = await Note.addNote({ userId, notebookId, title, content });
+      return res.json(note);
+    } else {
+      const error = new Error("We could not make a note");
+      error.status = 404;
+      next(error);
+    }
+  })
+);
+
+// READ a note
+// TODO: need auth?? & is it necessary to specify the path/params??
+router.get(
+  "/:userId/notebooks/:notebookId/notes/:noteId",
+  validateNote,
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId, noteId } = await req.params;
+    const note = await Note.findOne({
+      where: { id: noteId, userId, notebookId },
+    });
+
+    if (note) {
+      return res.json(note);
+    } else {
+      const error = new Error(
+        "Something went wrong! We could not find the note..."
+      );
+      error.status = 404;
+      next(error);
+    }
+  })
+);
+
+// UPDATE a note
+router.patch(
+  "/:userId/notebooks/:notebookId/notes/:noteId",
+  validateNote,
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId, noteId } = await req.params;
+    const note = await Note.findOne({
+      where: { id: noteId, userId, notebookId },
+    });
+
+    if (note) {
+      const { title, content } = await req.body;
+      const editedNote = await Note.editNote({ note, title, content });
+      return res.json(editedNote);
+    } else {
+      const error = new Error(
+        "Something went wrong! We could not edit the note..."
+      );
+      error.status = 404;
+      next(error);
+    }
+  })
+);
+
+// DELETE a note
+router.delete(
+  "/:userId/notebooks/:notebookId/notes/:noteId",
+  validateNote,
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId, noteId } = await req.params;
+    const note = await Note.findOne({
+      where: { id: noteId, userId, notebookId },
+    });
+
+    if (note) {
+      await note.destroy();
+      return res.json(`"${note.title}" has been Successfully deleted.`);
+    } else {
+      const error = new Error(
+        "Something went wrong! We could not find the note..."
+      );
+      error.status = 404;
+      next(error);
+    }
   })
 );
 module.exports = router;
