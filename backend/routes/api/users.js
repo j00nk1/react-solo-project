@@ -60,7 +60,7 @@ router.post(
   })
 );
 
-// ------------- NOTEBOOK routes /api/users/:userId/notebooks ------------------
+// ------------- NOTEBOOKS routes /api/users/:userId/notebooks ------------------
 // READ Notebooks
 router.get(
   "/:userId(\\d+)/notebooks/",
@@ -73,7 +73,7 @@ router.get(
   })
 );
 
-// --------NOTE Routes /api/users/:userId/notebooks/:notebookId/notes/----------
+// --------NOTES Routes /api/users/:userId/notebooks/:notebookId/notes/----------
 // READ notes
 router.get(
   "/:userId/notebooks/:notebookId/notes/",
@@ -124,7 +124,6 @@ router.post(
 );
 
 // READ a note
-// TODO: need auth?? & is it necessary to specify the path/params??
 router.get(
   "/:userId/notebooks/:notebookId/notes/:noteId",
   validateNote,
