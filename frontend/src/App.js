@@ -32,8 +32,8 @@ function App() {
             <UserHome />
           </Route>
           <Route path="*">
+            {/*TODO:Make Error handling components with sidebar <Error /> */}
             <h2>Page Not Found</h2>
-            {/*TODO:Make Error handling components <Error /> */}
           </Route>
         </Switch>
       )}
