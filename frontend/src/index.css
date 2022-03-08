@@ -72,6 +72,7 @@ button {
   border-radius: 10px;
   box-shadow: 5px 5px 0px 0px #dedede;
   color: #ffffff;
+  cursor: pointer;
   font-weight: bold;
   height: 30px;
   transition: all 0.2s ease;
