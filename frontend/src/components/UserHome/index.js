@@ -31,12 +31,11 @@ function UserHome() {
 
   const userPath = `/users/${userId}`;
   const notebookListPath = `${userPath}/notebooks`;
+  const noteListPath = `${userPath}/notes`;
 
   // ↓↓↓↓↓↓ TODO: Need notebookId & noteId, fetch and import into this file ↓↓↓↓↓↓
 
   const notebookPath = `${notebookListPath}/:notebookId`; // need to replace id
-
-  const noteListPath = `${notebookPath}/notes`;
 
   const notePath = `${noteListPath}/:noteId`; // need to replace id
 

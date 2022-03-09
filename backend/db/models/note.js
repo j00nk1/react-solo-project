@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       notebookId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       title: {
         type: DataTypes.STRING,
@@ -29,7 +29,12 @@ module.exports = (sequelize, DataTypes) => {
     Note.belongsTo(models.Notebook, { foreignKey: "notebookId" });
   };
 
-  Note.addNote = async function ({ userId, notebookId, title, content }) {
+  Note.addNote = async function ({
+    userId,
+    notebookId = null,
+    title,
+    content,
+  }) {
     const newNote = await Note.create({
       userId,
       notebookId,

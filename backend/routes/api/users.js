@@ -109,17 +109,16 @@ router.post(
 
 // READ notebook
 
-// --------NOTES Routes /api/users/:userId/notebooks/:notebookId/notes/----------
+// --------NOTES Routes /api/users/:userId/notes/----------
 // READ notes
 router.get(
-  "/:userId/notebooks/:notebookId/notes/",
+  "/:userId/notes/",
   asyncHandler(async (req, res, next) => {
-    const { userId, notebookId } = await req.params;
+    const { userId } = await req.params;
 
     const notes = await Note.findAll({
       where: {
         userId,
-        notebookId,
       },
       order: [["updatedAt", "DESC"]],
     });
@@ -136,21 +135,20 @@ router.get(
 
 // CREATE a note
 router.post(
-  "/:userId/notebooks/:notebookId/notes/",
+  "/:userId/notes/",
   validateNote,
   asyncHandler(async (req, res, next) => {
-    const { userId, notebookId } = await req.params;
-    const notebook = await Notebook.findOne({
+    const { userId } = await req.params;
+    const user = await User.findOne({
       where: {
-        id: notebookId,
-        userId,
+        id: userId,
       },
     });
 
     const { title, content } = await req.body;
 
-    if (notebook) {
-      const note = await Note.addNote({ userId, notebookId, title, content });
+    if (user) {
+      const note = await Note.addNote({ userId, title, content });
       return res.json(note);
     } else {
       const error = new Error("We could not make a note");
@@ -162,12 +160,12 @@ router.post(
 
 // READ a note
 router.get(
-  "/:userId/notebooks/:notebookId/notes/:noteId",
+  "/:userId/notes/:noteId",
   validateNote,
   asyncHandler(async (req, res, next) => {
-    const { userId, notebookId, noteId } = await req.params;
+    const { userId, noteId } = await req.params;
     const note = await Note.findOne({
-      where: { id: noteId, userId, notebookId },
+      where: { id: noteId, userId },
     });
 
     if (note) {
@@ -184,12 +182,12 @@ router.get(
 
 // UPDATE a note
 router.patch(
-  "/:userId/notebooks/:notebookId/notes/:noteId",
+  "/:userId/notes/:noteId",
   validateNote,
   asyncHandler(async (req, res, next) => {
-    const { userId, notebookId, noteId } = await req.params;
+    const { userId, noteId } = await req.params;
     const note = await Note.findOne({
-      where: { id: noteId, userId, notebookId },
+      where: { id: noteId, userId },
     });
 
     if (note) {
@@ -208,12 +206,12 @@ router.patch(
 
 // DELETE a note
 router.delete(
-  "/:userId/notebooks/:notebookId/notes/:noteId",
+  "/:userId/notes/:noteId",
   validateNote,
   asyncHandler(async (req, res, next) => {
-    const { userId, notebookId, noteId } = await req.params;
+    const { userId, noteId } = await req.params;
     const note = await Note.findOne({
-      where: { id: noteId, userId, notebookId },
+      where: { id: noteId, userId },
     });
 
     if (note) {

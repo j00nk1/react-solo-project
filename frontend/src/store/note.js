@@ -48,14 +48,12 @@ const removeNote = note => {
 // ---------------- Thunk Actions -------------
 // POST
 export const addNote = note => async dispatch => {
-  const { userId, notebookId, title, content } = note;
-  const res = await csrfFetch(
-    `/api/users/${userId}/notebooks/${notebookId}/notes/`,
-    {
-      method: "POST",
-      body: JSON.stringify({ title, content }),
-    }
-  );
+  const { userId, title, content } = note;
+
+  const res = await csrfFetch(`/api/users/${userId}/notes/`, {
+    method: "POST",
+    body: JSON.stringify({ title, content }),
+  });
   const data = await res.json();
   dispatch(createNote(data.note));
   return data;
@@ -63,11 +61,9 @@ export const addNote = note => async dispatch => {
 
 // GET all notes
 export const fetchNotes =
-  ({ userId, notebookId }) =>
+  ({ userId }) =>
   async dispatch => {
-    const res = await csrfFetch(
-      `/api/users/${userId}/notebooks/${notebookId}/notes/`
-    );
+    const res = await csrfFetch(`/api/users/${userId}/notes/`);
     if (res.ok) {
       const notes = await res.json();
       dispatch(loadNotes(notes));
@@ -77,11 +73,9 @@ export const fetchNotes =
 
 // GET a note
 export const fetchSingleNote =
-  ({ userId, notebookId, noteId }) =>
+  ({ userId, noteId }) =>
   async dispatch => {
-    const res = await csrfFetch(
-      `/api/users/${userId}/notebooks/${notebookId}/notes/${noteId}`
-    );
+    const res = await csrfFetch(`/api/users/${userId}/notes/${noteId}`);
     if (res.ok) {
       const note = await res.json();
       dispatch(loadSingleNote(note));
@@ -91,14 +85,11 @@ export const fetchSingleNote =
 
 // UPDATE a note
 export const patchNote = note => async dispatch => {
-  const { userId, notebookId, noteId, title, content } = note;
-  const res = await csrfFetch(
-    `/api/users/${userId}/notebooks/${notebookId}/notes/${noteId}`,
-    {
-      method: "PATCH",
-      body: JSON.stringify({ title, content }),
-    }
-  );
+  const { userId, noteId, title, content } = note;
+  const res = await csrfFetch(`/api/users/${userId}/notes/${noteId}`, {
+    method: "PATCH",
+    body: JSON.stringify({ title, content }),
+  });
 
   if (res.ok) {
     const editedNote = await res.json();
@@ -109,13 +100,10 @@ export const patchNote = note => async dispatch => {
 
 // DELETE note
 export const deleteNote = note => async dispatch => {
-  const { userId, notebookId, noteId } = note;
-  const res = await csrfFetch(
-    `/api/users/${userId}/notebooks/${notebookId}/notes/${noteId}`,
-    {
-      method: "DELETE",
-    }
-  );
+  const { userId, noteId } = note;
+  const res = await csrfFetch(`/api/users/${userId}/notes/${noteId}`, {
+    method: "DELETE",
+  });
 
   const deletedNote = await res.json();
   dispatch(removeNote(deletedNote));
