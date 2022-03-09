@@ -28,7 +28,6 @@ store.dispatch(
 store.dispatch(
   window.noteActions.addNote({
     userId: 5,
-    notebookId: 5,
     title: "This is test title",
     content: "This is test content using frontend route",
   })
