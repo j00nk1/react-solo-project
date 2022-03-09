@@ -145,10 +145,10 @@ router.post(
       },
     });
 
-    const { title, content } = await req.body;
+    const { title, content, notebookId } = await req.body;
 
     if (user) {
-      const note = await Note.addNote({ userId, title, content });
+      const note = await Note.addNote({ userId, title, content, notebookId });
       return res.json(note);
     } else {
       const error = new Error("We could not make a note");

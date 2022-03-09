@@ -49,10 +49,13 @@ const removeNote = note => {
 // POST
 export const addNote = note => async dispatch => {
   const { userId, title, content } = note;
-
+  let notebookId = null;
+  if (note.notebookId) {
+    notebookId = note.notebookId;
+  }
   const res = await csrfFetch(`/api/users/${userId}/notes/`, {
     method: "POST",
-    body: JSON.stringify({ title, content }),
+    body: JSON.stringify({ title, content, notebookId }),
   });
   const data = await res.json();
   dispatch(createNote(data.note));
