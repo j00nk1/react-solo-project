@@ -68,10 +68,46 @@ router.get(
     const { userId } = await req.params;
 
     // TODO: Grab all notes and send it to frontend
+    const notebookList = await Notebook.findAll({
+      where: { userId },
+    });
 
-    res.json({ userId });
+    const mainNote = notebookList.filter(notebook => notebook.isMain)[0];
+    console.log(mainNote);
+
+    res.json({ notebookList, mainNote });
   })
 );
+
+// Create a notebook
+router.post(
+  "/:userId/notebooks/",
+  validateNote,
+  asyncHandler(async (req, res, next) => {
+    const { userId } = await req.params;
+    const notebook = await User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    const { title } = await req.body;
+
+    if (notebook) {
+      const notebook = await Notebook.addNotebook({
+        userId,
+        title,
+      });
+      return res.json(notebook);
+    } else {
+      const error = new Error("We could not make a notebook");
+      error.status = 404;
+      next(error);
+    }
+  })
+);
+
+// READ notebook
 
 // --------NOTES Routes /api/users/:userId/notebooks/:notebookId/notes/----------
 // READ notes

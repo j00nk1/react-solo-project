@@ -1,8 +1,17 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import * as notebookActions from "../../store/notebook";
 
 function NotebookList({ props }) {
   const { notePath, notebookPath, username, id } = props;
-  // usrId is string
+  const dispatch = useDispatch();
+
+  // const handleSubmit = async e => {
+  //   e.preventDefault();
+  //   const nbInfo = await dispatch(
+  //     notebookActions.addNotebook({ userId: id, title })
+  //   );
+  // };
 
   return (
     <>
