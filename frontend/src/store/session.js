@@ -1,5 +1,3 @@
-// ----------------Importing Packages --------------
-
 // -------------- Importing files/functions ----------
 import { csrfFetch } from "./csrf";
 

@@ -85,6 +85,7 @@ router.get(
         userId,
         notebookId,
       },
+      order: [["updatedAt", "DESC"]],
     });
 
     if (notes.length > 0) {

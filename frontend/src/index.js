@@ -11,6 +11,7 @@ import configureStore from "./store";
 import { ModalProvider } from "./context/Modal";
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from "./store/session";
+import * as noteActions from "./store/note";
 
 // ------------- Initializing imported stuff ----------
 const store = configureStore();
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV !== "production") {
   window.csrfFetch = csrfFetch;
   window.store = store;
   window.sessionActions = sessionActions;
+  window.noteActions = noteActions;
 }
 
 function Root() {
