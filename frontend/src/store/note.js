@@ -62,7 +62,6 @@ export const addNote = note => async dispatch => {
 };
 
 // GET all notes
-// loadNotes
 export const fetchNotes =
   ({ userId, notebookId }) =>
   async dispatch => {
@@ -73,6 +72,20 @@ export const fetchNotes =
       const notes = await res.json();
       dispatch(loadNotes(notes));
       return notes;
+    }
+  };
+
+// GET a note
+export const fetchSingleNote =
+  ({ userId, notebookId, noteId }) =>
+  async dispatch => {
+    const res = await csrfFetch(
+      `/api/users/${userId}/notebooks/${notebookId}/notes/${noteId}`
+    );
+    if (res.ok) {
+      const note = await res.json();
+      dispatch(loadSingleNote(note));
+      return note;
     }
   };
 
@@ -90,6 +103,14 @@ const noteReducer = (state = initialState, action) => {
       const noteList = {};
       action.payload.notes.forEach(note => (noteList[note.id] = note));
       return { ...noteList, ...state };
+    case LOAD_SINGLE_NOTE:
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...state[action.payload.id],
+          ...action.payload,
+        },
+      };
     default:
       return state;
   }
