@@ -89,6 +89,24 @@ export const fetchSingleNote =
     }
   };
 
+// UPDATE a note
+export const patchNote = note => async dispatch => {
+  const { userId, notebookId, noteId, title, content } = note;
+  const res = await csrfFetch(
+    `/api/users/${userId}/notebooks/${notebookId}/notes/${noteId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ title, content }),
+    }
+  );
+
+  if (res.ok) {
+    const editedNote = await res.json();
+    dispatch(updateNote(editedNote));
+    return editedNote;
+  }
+};
+
 // --------------- Reducer ----------------
 const initialState = { note: null };
 
@@ -104,6 +122,14 @@ const noteReducer = (state = initialState, action) => {
       action.payload.notes.forEach(note => (noteList[note.id] = note));
       return { ...noteList, ...state };
     case LOAD_SINGLE_NOTE:
+      return {
+        ...state,
+        [action.payload.id]: {
+          ...state[action.payload.id],
+          ...action.payload,
+        },
+      };
+    case UPDATE_NOTE:
       return {
         ...state,
         [action.payload.id]: {
