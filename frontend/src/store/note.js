@@ -10,10 +10,10 @@ const UPDATE_NOTE = "notes/updateNote";
 const REMOVE_NOTE = "notes/removeNote";
 
 // ---------------- Action Creators -----------
-const createNote = note => {
+const createNote = newNote => {
   return {
     type: CREATE_NOTE,
-    payload: note,
+    payload: newNote,
   };
 };
 
@@ -46,6 +46,7 @@ const removeNote = note => {
 };
 
 // ---------------- Thunk Actions -------------
+// POST
 export const addNote = note => async dispatch => {
   const { userId, notebookId, title, content } = note;
   const res = await csrfFetch(
@@ -60,6 +61,21 @@ export const addNote = note => async dispatch => {
   return data;
 };
 
+// GET all notes
+// loadNotes
+export const fetchNotes =
+  ({ userId, notebookId }) =>
+  async dispatch => {
+    const res = await csrfFetch(
+      `/api/users/${userId}/notebooks/${notebookId}/notes/`
+    );
+    if (res.ok) {
+      const notes = await res.json();
+      dispatch(loadNotes(notes));
+      return notes;
+    }
+  };
+
 // --------------- Reducer ----------------
 const initialState = { note: null };
 
@@ -70,6 +86,10 @@ const noteReducer = (state = initialState, action) => {
       newState = { ...state };
       newState.note = action.payload;
       return newState;
+    case LOAD_NOTES:
+      const noteList = {};
+      action.payload.notes.forEach(note => (noteList[note.id] = note));
+      return { ...noteList, ...state };
     default:
       return state;
   }
