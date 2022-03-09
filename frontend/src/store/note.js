@@ -107,6 +107,21 @@ export const patchNote = note => async dispatch => {
   }
 };
 
+// DELETE note
+export const deleteNote = note => async dispatch => {
+  const { userId, notebookId, noteId } = note;
+  const res = await csrfFetch(
+    `/api/users/${userId}/notebooks/${notebookId}/notes/${noteId}`,
+    {
+      method: "DELETE",
+    }
+  );
+
+  const deletedNote = await res.json();
+  dispatch(removeNote(deletedNote));
+  return deletedNote;
+};
+
 // --------------- Reducer ----------------
 const initialState = { note: null };
 
@@ -137,6 +152,10 @@ const noteReducer = (state = initialState, action) => {
           ...action.payload,
         },
       };
+    case REMOVE_NOTE:
+      newState = { ...state };
+      delete newState[action.payload];
+      return newState;
     default:
       return state;
   }
