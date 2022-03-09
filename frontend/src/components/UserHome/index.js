@@ -8,6 +8,7 @@ import "./UserHome.css";
 function UserHome() {
   const [showNote, setShowNote] = useState(true);
   const [showNotebook, setShowNotebook] = useState(false);
+  const [selected, setSelected] = useState(true);
   const history = useHistory();
 
   const sessionUser = useSelector(state => state?.session?.user);
@@ -43,6 +44,8 @@ function UserHome() {
 
   const homeOnClick = e => {
     e.preventDefault();
+    setShowNote(true);
+    setShowNotebook(false);
     history.push(userPath);
   };
 
@@ -91,10 +94,12 @@ function UserHome() {
           </li>
         </ul>
         <ul className="side_list">
-          <li>LIST AEW AEF AEF ADF ANFWEFNAWELFN da</li>
-          <li>LIST</li>
-          {showNote && <NoteList />}
-          {showNotebook && <NotebookList />}
+          {showNote && (
+            <NoteList props={{ notePath, notebookPath, username, id }} />
+          )}
+          {showNotebook && (
+            <NotebookList props={{ notePath, notebookPath, username, id }} />
+          )}
         </ul>
       </div>
 

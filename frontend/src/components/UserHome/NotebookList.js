@@ -1,9 +1,14 @@
 import React from "react";
 
-function NotebookList() {
+function NotebookList({ props }) {
+  const { notePath, notebookPath, username, id } = props;
+  // usrId is string
+
   return (
     <>
-      <li>This is Notebook list</li>
+      <h2>
+        <i className="fa-solid fa-book"></i> Notebook
+      </h2>
     </>
   );
 }
