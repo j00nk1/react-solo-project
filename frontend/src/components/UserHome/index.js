@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import NotebookList from "./NotebookList";
 import NoteList from "./NoteList";
 import "./UserHome.css";
 
+import * as noteActions from "../../store/note";
+import NoteForm from "../NoteForm";
+
 function UserHome() {
-  const [showNote, setShowNote] = useState(true);
+  const [showNote, setShowNote] = useState(false);
   const [showNotebook, setShowNotebook] = useState(false);
   const [selected, setSelected] = useState(true);
+  const [notes, setNotes] = useState([]);
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const sessionUser = useSelector(state => state?.session?.user);
   const { userId } = useParams();
@@ -33,34 +38,31 @@ function UserHome() {
   const notebookListPath = `${userPath}/notebooks`;
   const noteListPath = `${userPath}/notes`;
 
-  // ↓↓↓↓↓↓ TODO: Need notebookId & noteId, fetch and import into this file ↓↓↓↓↓↓
-
-  const notebookPath = `${notebookListPath}/:notebookId`; // need to replace id
-
-  const notePath = `${noteListPath}/:noteId`; // need to replace id
-
-  // ↑↑↑↑↑ TODO: Need notebookId & noteId, fetch and import into this file ↑↑↑↑↑
-
-  const homeOnClick = e => {
+  const homeOnClick = async e => {
     e.preventDefault();
-    setShowNote(true);
+
+    setShowNote(false);
     setShowNotebook(false);
     history.push(userPath);
   };
 
-  const createNoteOnClick = e => {
+  const createNoteOnClick = async e => {
     e.preventDefault();
     history.push(`${noteListPath}/new`);
   };
 
-  const noteListOnClick = e => {
+  const noteListOnClick = async e => {
     e.preventDefault();
+
+    const noteList = await dispatch(noteActions.fetchNotes({ userId }));
+    setNotes(noteList.notes);
+
     setShowNote(true);
     setShowNotebook(false);
     history.push(`${noteListPath}`);
   };
 
-  const notebookListOnClick = e => {
+  const notebookListOnClick = async e => {
     e.preventDefault();
     setShowNotebook(true);
     setShowNote(false);
@@ -93,17 +95,18 @@ function UserHome() {
           </li>
         </ul>
         <ul className="side_list">
-          {showNote && (
-            <NoteList props={{ notePath, notebookPath, username, id }} />
-          )}
+          {showNote && <NoteList props={{ noteListPath, id, notes }} />}
           {showNotebook && (
-            <NotebookList props={{ notePath, notebookPath, username, id }} />
+            <NotebookList
+              props={{ noteListPath, notebookListPath, username, id }}
+            />
           )}
         </ul>
       </div>
 
       {/* If the note list is selected, render selected note */}
       <div className="note_selected">
+        <NoteForm />
         {/* If there is no note, render "Create a Note" */}
         {/* If there is, render the note in the top of the list*/}
       </div>
