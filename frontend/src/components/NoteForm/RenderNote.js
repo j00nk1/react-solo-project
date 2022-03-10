@@ -12,8 +12,15 @@ function RenderNote() {
   const noteId = path.split("/")[4];
   const history = useHistory();
 
-  const { renderNote, setNotes, content, setContent, title, setTitle } =
-    useListContext();
+  const {
+    renderNote,
+    setNotes,
+    content,
+    setContent,
+    title,
+    setTitle,
+    setRenderNote,
+  } = useListContext();
   // const originalContent = content.slice();
   // const originalTitle = title.slice();
   const [notebookSelected, setNotebookSelected] = useState(null);
@@ -45,7 +52,6 @@ function RenderNote() {
         noteActions.patchNote({ userId, id, title, content })
       );
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-
       setNotes(noteList.notes);
       return await history.push(`/users/${userId}/notes/${editedNote.id}`);
     }
@@ -57,13 +63,25 @@ function RenderNote() {
         const originalNote = await dispatch(
           noteActions.fetchSingleNote({ userId, noteId })
         );
-
         setContent(originalNote.content);
         setTitle(originalNote.title);
         // TODO: need to set originalNote's notebookId
         setNotebookSelected(null);
         setSubmitClicked(false);
       }
+    }
+  };
+
+  const handleDelete = async e => {
+    e.preventDefault();
+    if (window.confirm("Are you sure you want to delete this note?")) {
+      await dispatch(noteActions.deleteNote({ userId, noteId }));
+
+      const recentNote = await dispatch(
+        noteActions.fetchRecentNote({ userId })
+      );
+      setRenderNote(recentNote);
+      return await history.push(`/users/${userId}/notes/${recentNote.id}`);
     }
   };
 
@@ -100,7 +118,9 @@ function RenderNote() {
         <button onClick={cancelBtn} type="reset">
           Cancel Edit
         </button>
-        <button className="btn_alert">Delete Note</button>
+        <button className="btn_alert" onClick={handleDelete}>
+          Delete Note
+        </button>
       </div>
     </form>
   );
