@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { useListContext } from "../../context/ListContexts";
 import { useNotebookContext } from "../../context/NotebookContext";
@@ -33,11 +33,8 @@ function NewNote() {
   const handleSubmit = async e => {
     e.preventDefault();
     if (!errors.length) {
-      const newNote = await dispatch(
-        noteActions.addNote({ userId, title, content })
-      );
+      await dispatch(noteActions.addNote({ userId, title, content }));
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-      const noteId = newNote.id;
       setNotes(noteList.notes);
       setContent("");
       setTitle("");

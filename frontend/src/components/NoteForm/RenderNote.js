@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 
 import { useListContext } from "../../context/ListContexts";
+import { useNotebookContext } from "../../context/NotebookContext";
 import * as noteActions from "../../store/note";
 
 function RenderNote() {
@@ -23,7 +24,7 @@ function RenderNote() {
   } = useListContext();
   // const originalContent = content.slice();
   // const originalTitle = title.slice();
-  const [notebookSelected, setNotebookSelected] = useState(null);
+  const { selectedNotebook, setSelectedNotebook } = useNotebookContext();
   const [errors, setErrors] = useState([]);
   const [submitClicked, setSubmitClicked] = useState(false);
 
@@ -66,7 +67,7 @@ function RenderNote() {
         setContent(originalNote.content);
         setTitle(originalNote.title);
         // TODO: need to set originalNote's notebookId
-        setNotebookSelected(null);
+        setSelectedNotebook(null);
         setSubmitClicked(false);
       }
     }
@@ -99,7 +100,7 @@ function RenderNote() {
       )}
       <label>Choose Notebook</label>
       {/* TODO: Need to fetch the user's notebook list and render as the options */}
-      <select onChange={e => setNotebookSelected(e.target.value)}>
+      <select onChange={e => setSelectedNotebook(e.target.value)}>
         <option value={null}>--Notebook--</option>
       </select>
 

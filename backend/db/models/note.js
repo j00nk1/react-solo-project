@@ -29,12 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     Note.belongsTo(models.Notebook, { foreignKey: "notebookId" });
   };
 
-  Note.addNote = async function ({
-    userId,
-    notebookId = null,
-    title,
-    content,
-  }) {
+  Note.addNote = async function ({ userId, notebookId, title, content }) {
     const newNote = await Note.create({
       userId,
       notebookId,
@@ -44,8 +39,8 @@ module.exports = (sequelize, DataTypes) => {
     return await Note.findByPk(newNote.id);
   };
 
-  Note.editNote = async function ({ note, title, content }) {
-    note.update({ title, content });
+  Note.editNote = async function ({ note, title, content, notebookId }) {
+    note.update({ title, content, notebookId });
     return await note;
   };
 

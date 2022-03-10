@@ -31,11 +31,19 @@ const validateNote = [
   check("title")
     .exists({ checkFalsy: true })
     .withMessage("Please provide your note's title")
-    .isLength({ max: 256 })
-    .withMessage("Title must be shorter than 256 characters"),
+    .isLength({ max: 30 })
+    .withMessage("Title must be shorter than 30 characters"),
   check("content")
     .exists({ checkFalsy: true })
     .withMessage("Please provide your note's content"),
+];
+
+const validateNotebook = [
+  check("title")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide your note's title")
+    .isLength({ max: 20 })
+    .withMessage("Title must be shorter than 20 characters"),
 ];
 
 // --------- Route Handlers /api/users/ ------------------
@@ -67,22 +75,20 @@ router.get(
   asyncHandler(async (req, res) => {
     const { userId } = await req.params;
 
-    // TODO: Grab all notes and send it to frontend
     const notebookList = await Notebook.findAll({
       where: { userId },
     });
 
-    const mainNote = notebookList.filter(notebook => notebook.isMain)[0];
-    console.log(mainNote);
+    const mainNotebook = notebookList.filter(notebook => notebook.isMain)[0];
 
-    res.json({ notebookList, mainNote });
+    return res.json({ notebookList, mainNotebook });
   })
 );
 
 // Create a notebook
 router.post(
   "/:userId/notebooks/",
-  validateNote,
+  validateNotebook,
   asyncHandler(async (req, res, next) => {
     const { userId } = await req.params;
     const notebook = await User.findOne({
@@ -107,7 +113,43 @@ router.post(
   })
 );
 
-// READ notebook
+// READ a notebook
+router.get(
+  "/:userId(\\d+)/notebooks/:notebookId(\\d+)",
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId } = await req.params;
+
+    const notebook = await Notebook.findByPk(notebookId);
+    if (notebook.userId !== +userId) {
+      const error = new Error("You are not authorized to see this notebook");
+      error.status = 404;
+      return next(error);
+    }
+
+    return res.json(notebook);
+  })
+);
+
+router.delete(
+  "/:userId(\\d+)/notebooks/:notebookId(\\d+)",
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId } = await req.params;
+    const notebook = await Notebook.findOne({
+      where: { id: notebookId, userId },
+    });
+
+    if (notebook) {
+      await notebook.destroy();
+      return res.json(`"${notebook.title}" has been Successfully deleted.`);
+    } else {
+      const error = new Error(
+        "Something went wrong! We could not find the notebook..."
+      );
+      error.status = 404;
+      next(error);
+    }
+  })
+);
 
 // --------NOTES Routes /api/users/:userId/notes/----------
 // READ notes
@@ -192,7 +234,16 @@ router.patch(
 
     if (note) {
       const { title, content } = await req.body;
-      const editedNote = await Note.editNote({ note, title, content });
+      let notebookId = null;
+      if (await req.body.notebookId) {
+        notebookId = await req.body.notebookId;
+      }
+      const editedNote = await Note.editNote({
+        note,
+        title,
+        content,
+        notebookId,
+      });
       return res.json(editedNote);
     } else {
       const error = new Error(
@@ -207,7 +258,6 @@ router.patch(
 // DELETE a note
 router.delete(
   "/:userId/notes/:noteId",
-  validateNote,
   asyncHandler(async (req, res, next) => {
     const { userId, noteId } = await req.params;
     const note = await Note.findOne({
