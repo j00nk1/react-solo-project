@@ -7,6 +7,7 @@ import SignupFormPage from "./components/SignupFormPage";
 import Navigation from "./components/Navigation";
 import UserHome from "./components/UserHome";
 import { ListProvider } from "./context/ListContexts";
+import { NotebookProvider } from "./context/NotebookContext";
 
 // ------------- Store files --------------
 import * as sessionActions from "./store/session";
@@ -30,9 +31,11 @@ function App() {
             <SignupFormPage />
           </Route>
           <Route path="/users/:userId" isLoaded={isLoaded}>
-            <ListProvider>
-              <UserHome />
-            </ListProvider>
+            <NotebookProvider>
+              <ListProvider>
+                <UserHome />
+              </ListProvider>
+            </NotebookProvider>
           </Route>
           <Route path="*">
             {/*TODO:Make Error handling components with sidebar <Error /> */}

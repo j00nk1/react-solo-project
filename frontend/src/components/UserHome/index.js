@@ -29,12 +29,11 @@ function UserHome() {
     notes,
     setNotes,
     setRenderNote,
-    renderNote,
   } = useListContext();
   const sessionUser = useSelector(state => state?.session?.user);
   const { userId } = useParams();
-  let id, username;
 
+  let id, username;
   try {
     if (!sessionUser) throw new Error("Please log in");
     id = sessionUser.id;

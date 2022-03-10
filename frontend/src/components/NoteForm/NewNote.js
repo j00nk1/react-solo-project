@@ -3,19 +3,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
 
 import { useListContext } from "../../context/ListContexts";
+import { useNotebookContext } from "../../context/NotebookContext";
 import * as noteActions from "../../store/note";
 
 function NewNote() {
   const dispatch = useDispatch();
   const path = useLocation().pathname;
   const userId = path.split("/")[2];
-
   const history = useHistory();
 
   const { setNotes } = useListContext();
+  const { selectedNotebook, setSelectedNotebook } = useNotebookContext();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [notebookSelected, setNotebookSelected] = useState(null);
   const [errors, setErrors] = useState([]);
   const [submitClicked, setSubmitClicked] = useState(false);
 
@@ -41,7 +41,7 @@ function NewNote() {
       setNotes(noteList.notes);
       setContent("");
       setTitle("");
-      setNotebookSelected(null);
+      setSelectedNotebook(null);
       setSubmitClicked(false);
       return await history.push(`/users/${userId}/notes/new`);
     }
@@ -52,7 +52,7 @@ function NewNote() {
       if (window.confirm("Are you sure you want to discard the change?")) {
         setContent("");
         setTitle("");
-        setNotebookSelected(null);
+        setSelectedNotebook(null);
         setSubmitClicked(false);
       }
     }
@@ -69,7 +69,7 @@ function NewNote() {
       )}
       <label>Choose Notebook</label>
       {/* TODO: Need to fetch the user's notebook list and render as the options */}
-      <select onChange={e => setNotebookSelected(e.target.value)}>
+      <select onChange={e => setSelectedNotebook(e.target.value)}>
         <option value={null}>--Notebook--</option>
       </select>
 

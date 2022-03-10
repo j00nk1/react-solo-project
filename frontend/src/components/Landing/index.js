@@ -10,7 +10,7 @@ function Landing() {
         <img
           src={yen}
           alt="yen"
-          style={{ display: "block", margin: "0 auto" }}
+          style={{ display: "block", margin: "0 auto", width: "50vw" }}
         />
       </h1>
     </>
