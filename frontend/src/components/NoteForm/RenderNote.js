@@ -40,8 +40,10 @@ function RenderNote() {
     e.preventDefault();
 
     if (!errors.length) {
-      console.log(path);
-      const editedNote = await dispatch(noteActions.patchNote(renderNote));
+      const id = noteId;
+      const editedNote = await dispatch(
+        noteActions.patchNote({ userId, id, title, content })
+      );
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
 
       setNotes(noteList.notes);
