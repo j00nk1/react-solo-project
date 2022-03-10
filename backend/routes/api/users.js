@@ -67,15 +67,13 @@ router.get(
   asyncHandler(async (req, res) => {
     const { userId } = await req.params;
 
-    // TODO: Grab all notes and send it to frontend
     const notebookList = await Notebook.findAll({
       where: { userId },
     });
 
-    const mainNote = notebookList.filter(notebook => notebook.isMain)[0];
-    console.log(mainNote);
+    const mainNotebook = notebookList.filter(notebook => notebook.isMain)[0];
 
-    res.json({ notebookList, mainNote });
+    return res.json({ notebookList, mainNotebook });
   })
 );
 
@@ -107,7 +105,43 @@ router.post(
   })
 );
 
-// READ notebook
+// READ a notebook
+router.get(
+  "/:userId(\\d+)/notebooks/:notebookId(\\d+)",
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId } = await req.params;
+
+    const notebook = await Notebook.findByPk(notebookId);
+    if (notebook.userId !== +userId) {
+      const error = new Error("You are not authorized to see this notebook");
+      error.status = 404;
+      return next(error);
+    }
+
+    return res.json(notebook);
+  })
+);
+
+router.delete(
+  "/:userId(\\d+)/notebooks/:notebookId(\\d+)",
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId } = await req.params;
+    const notebook = await Notebook.findOne({
+      where: { id: notebookId, userId },
+    });
+
+    if (notebook) {
+      await notebook.destroy();
+      return res.json(`"${notebook.title}" has been Successfully deleted.`);
+    } else {
+      const error = new Error(
+        "Something went wrong! We could not find the notebook..."
+      );
+      error.status = 404;
+      next(error);
+    }
+  })
+);
 
 // --------NOTES Routes /api/users/:userId/notes/----------
 // READ notes
@@ -136,7 +170,6 @@ router.get(
 // CREATE a note
 router.post(
   "/:userId/notes/",
-  validateNote,
   asyncHandler(async (req, res, next) => {
     const { userId } = await req.params;
     const user = await User.findOne({
@@ -192,7 +225,16 @@ router.patch(
 
     if (note) {
       const { title, content } = await req.body;
-      const editedNote = await Note.editNote({ note, title, content });
+      let notebookId = null;
+      if (await req.body.notebookId) {
+        notebookId = await req.body.notebookId;
+      }
+      const editedNote = await Note.editNote({
+        note,
+        title,
+        content,
+        notebookId,
+      });
       return res.json(editedNote);
     } else {
       const error = new Error(

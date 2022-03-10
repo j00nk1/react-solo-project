@@ -50,48 +50,55 @@ export const addNotebook = notebook => async dispatch => {
   return data;
 };
 
-// // GET all notes
-// export const fetchNotes =
-//   ({ userId, notebookId }) =>
-//   async dispatch => {
-//     const res = await csrfFetch(
-//       `/api/users/${userId}/notebooks/${notebookId}/notes/`
-//     );
-//     if (res.ok) {
-//       const notes = await res.json();
-//       dispatch(loadNotes(notes));
-//       return notes;
-//     }
-//   };
+// GET all notebooks
+export const fetchNotebooks =
+  ({ userId }) =>
+  async dispatch => {
+    const res = await csrfFetch(`/api/users/${userId}/notebooks/`);
+    if (res.ok) {
+      const notebooks = await res.json();
+      await dispatch(loadNotebooks(notebooks.notebookList));
+      return notebooks.notebookList;
+    }
+  };
 
-// // GET a note
-// export const fetchSingleNote =
-//   ({ userId, notebookId, noteId }) =>
-//   async dispatch => {
-//     const res = await csrfFetch(
-//       `/api/users/${userId}/notebooks/${notebookId}/notes/${noteId}`
-//     );
-//     if (res.ok) {
-//       const note = await res.json();
-//       dispatch(loadSingleNote(note));
-//       return note;
-//     }
-//   };
+// GET a notebook
+export const fetchSingleNotebook =
+  ({ userId, notebookId }) =>
+  async dispatch => {
+    const res = await csrfFetch(`/api/users/${userId}/notebooks/${notebookId}`);
+    if (res.ok) {
+      const notebook = await res.json();
+      dispatch(loadSingleNotebook(notebook));
+      return notebook;
+    }
+  };
 
-// // DELETE note
-// export const deleteNote = note => async dispatch => {
-//   const { userId, notebookId, noteId } = note;
-//   const res = await csrfFetch(
-//     `/api/users/${userId}/notebooks/${notebookId}/notes/${noteId}`,
-//     {
-//       method: "DELETE",
-//     }
-//   );
-
-//   const deletedNote = await res.json();
-//   dispatch(removeNote(deletedNote));
-//   return deletedNote;
-// };
+export const fetchMainNotebook =
+  ({ userId }) =>
+  async dispatch => {
+    const res = await csrfFetch(`/api/users/${userId}/notebooks/`);
+    if (res.ok) {
+      const notebooks = await res.json();
+      const mainNotebook = notebooks.mainNotebook;
+      dispatch(loadSingleNotebook(mainNotebook));
+      return mainNotebook;
+    }
+  };
+// // DELETE notebook
+export const deleteNotebook =
+  ({ userId, notebookId }) =>
+  async dispatch => {
+    const res = await csrfFetch(
+      `/api/users/${userId}/notebooks/${notebookId}`,
+      {
+        method: "DELETE",
+      }
+    );
+    const deletedNotebook = await res.json();
+    dispatch(removeNotebook(deletedNotebook));
+    return deletedNotebook;
+  };
 
 // --------------- Reducer ----------------
 const initialState = { notebook: null };
@@ -105,7 +112,7 @@ const notebookReducer = (state = initialState, action) => {
       return newState;
     case LOAD_NOTEBOOKS:
       const notebookList = {};
-      action.payload.notebooks.forEach(
+      action.payload.forEach(
         notebook => (notebookList[notebook.id] = notebook)
       );
       return { ...notebookList, ...state };
