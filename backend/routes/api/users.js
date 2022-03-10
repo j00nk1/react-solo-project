@@ -31,11 +31,19 @@ const validateNote = [
   check("title")
     .exists({ checkFalsy: true })
     .withMessage("Please provide your note's title")
-    .isLength({ max: 256 })
-    .withMessage("Title must be shorter than 256 characters"),
+    .isLength({ max: 30 })
+    .withMessage("Title must be shorter than 30 characters"),
   check("content")
     .exists({ checkFalsy: true })
     .withMessage("Please provide your note's content"),
+];
+
+const validateNotebook = [
+  check("title")
+    .exists({ checkFalsy: true })
+    .withMessage("Please provide your note's title")
+    .isLength({ max: 20 })
+    .withMessage("Title must be shorter than 20 characters"),
 ];
 
 // --------- Route Handlers /api/users/ ------------------
@@ -80,7 +88,7 @@ router.get(
 // Create a notebook
 router.post(
   "/:userId/notebooks/",
-  validateNote,
+  validateNotebook,
   asyncHandler(async (req, res, next) => {
     const { userId } = await req.params;
     const notebook = await User.findOne({
@@ -170,6 +178,7 @@ router.get(
 // CREATE a note
 router.post(
   "/:userId/notes/",
+  validateNote,
   asyncHandler(async (req, res, next) => {
     const { userId } = await req.params;
     const user = await User.findOne({
@@ -249,7 +258,6 @@ router.patch(
 // DELETE a note
 router.delete(
   "/:userId/notes/:noteId",
-  validateNote,
   asyncHandler(async (req, res, next) => {
     const { userId, noteId } = await req.params;
     const note = await Note.findOne({
