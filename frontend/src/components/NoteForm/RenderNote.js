@@ -74,9 +74,12 @@ function RenderNote() {
 
   const handleDelete = async e => {
     e.preventDefault();
-    if (window.confirm("Are you sure you want to delete this note?")) {
+    if (window.confirm("Are you sure you want to DELETE this note?")) {
       await dispatch(noteActions.deleteNote({ userId, noteId }));
 
+      const noteList = await dispatch(noteActions.fetchNotes({ userId }));
+
+      setNotes(noteList.notes);
       const recentNote = await dispatch(
         noteActions.fetchRecentNote({ userId })
       );
