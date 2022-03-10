@@ -31,6 +31,10 @@ function ProfileButton({ user }) {
     history.push("/");
   };
 
+  const userHome = e => {
+    history.push(`/users/${user.id}`);
+  };
+
   return (
     <div className="header_right_user">
       <button onClick={openMenu}>
@@ -38,8 +42,10 @@ function ProfileButton({ user }) {
       </button>
       {showMenu && user && (
         <ul className="profile-dropdown">
-          <li>{user.username}</li>
           <li>{user.email}</li>
+          <button onClick={userHome} style={{ margin: "5px" }}>
+            HOME
+          </button>
           <li>
             <button onClick={logout}>Log Out</button>
           </li>
