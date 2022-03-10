@@ -1,21 +1,27 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect, useHistory, useParams } from "react-router-dom";
+
+import { useListContext } from "../../context/ListContexts";
 import NotebookList from "./NotebookList";
 import NoteList from "./NoteList";
+import NoteForm from "../NoteForm";
+import * as noteActions from "../../store/note";
 import "./UserHome.css";
 
-import * as noteActions from "../../store/note";
-import NoteForm from "../NoteForm";
-
 function UserHome() {
-  const [showNote, setShowNote] = useState(false);
-  const [showNotebook, setShowNotebook] = useState(false);
   const [selected, setSelected] = useState(true);
-  const [notes, setNotes] = useState([]);
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const {
+    showNote,
+    setShowNote,
+    showNotebook,
+    setShowNotebook,
+    notes,
+    setNotes,
+  } = useListContext();
   const sessionUser = useSelector(state => state?.session?.user);
   const { userId } = useParams();
   let id, username;

@@ -14,7 +14,7 @@ function NoteList({ props }) {
   }, [info]);
   return (
     <>
-      <h2>
+      <h2 id="list_title">
         <i className="fa-solid fa-note-sticky"></i> Notes
       </h2>
       {notes.length &&
@@ -25,7 +25,6 @@ function NoteList({ props }) {
               dispatch(
                 noteActions.fetchSingleNote({ userId: id, noteId: note.id })
               );
-              console.log("clicked", note.title);
               return history.push(`${noteListPath}/${note.id}`);
             }}
           >
