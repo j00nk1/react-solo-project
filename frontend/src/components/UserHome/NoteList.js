@@ -61,7 +61,7 @@ function NoteList({ props }) {
             <small
               style={{
                 position: "absolute",
-                right: 0,
+                right: "5px",
                 bottom: 0,
                 color: "gray",
               }}
