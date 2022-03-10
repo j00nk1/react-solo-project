@@ -9,6 +9,8 @@ export function ListProvider({ children }) {
   const [showNotebook, setShowNotebook] = useState(false);
   const [notes, setNotes] = useState([]);
   const [renderNote, setRenderNote] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
 
   return (
     <ListContext.Provider
@@ -21,6 +23,10 @@ export function ListProvider({ children }) {
         setNotes,
         renderNote,
         setRenderNote,
+        title,
+        setTitle,
+        content,
+        setContent,
       }}
     >
       {children}

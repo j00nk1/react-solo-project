@@ -100,8 +100,8 @@ export const fetchSingleNote =
 
 // UPDATE a note
 export const patchNote = note => async dispatch => {
-  const { userId, noteId, title, content } = note;
-  const res = await csrfFetch(`/api/users/${userId}/notes/${noteId}`, {
+  const { userId, id, title, content } = note;
+  const res = await csrfFetch(`/api/users/${userId}/notes/${id}`, {
     method: "PATCH",
     body: JSON.stringify({ title, content }),
   });

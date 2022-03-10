@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 
 import { useListContext } from "../../context/ListContexts";
 import * as noteActions from "../../store/note";
 
 function NewNote() {
   const dispatch = useDispatch();
-  const { userId } = useParams();
+  const path = useLocation().pathname;
+  const userId = path.split("/")[2];
+
   const history = useHistory();
 
   const { setNotes } = useListContext();
@@ -31,11 +33,17 @@ function NewNote() {
   const handleSubmit = async e => {
     e.preventDefault();
     if (!errors.length) {
-      await dispatch(noteActions.addNote({ userId, title, content }));
+      const newNote = await dispatch(
+        noteActions.addNote({ userId, title, content })
+      );
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-
+      const noteId = newNote.id;
       setNotes(noteList.notes);
-      return await history.push(`/users/${userId}/notes/`);
+      setContent("");
+      setTitle("");
+      setNotebookSelected(null);
+      setSubmitClicked(false);
+      return await history.push(`/users/${userId}/notes/new`);
     }
   };
 

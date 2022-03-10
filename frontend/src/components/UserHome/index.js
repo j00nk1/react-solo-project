@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useParams,
+} from "react-router-dom";
 
 import { useListContext } from "../../context/ListContexts";
 import NotebookList from "./NotebookList";
@@ -8,7 +14,7 @@ import NoteList from "./NoteList";
 import NoteForm from "../NoteForm";
 import * as noteActions from "../../store/note";
 import "./UserHome.css";
-import RenderNote from "./RenderNote";
+import RenderNote from "../NoteForm/RenderNote";
 
 function UserHome() {
   const [selected, setSelected] = useState("");
@@ -78,8 +84,9 @@ function UserHome() {
 
     const recentNote = await dispatch(noteActions.fetchRecentNote({ userId }));
     setRenderNote(recentNote);
+    const { id } = recentNote;
 
-    history.push(`${noteListPath}`);
+    history.push(`${noteListPath}/${id}`);
   };
 
   const notebookListOnClick = async e => {
@@ -137,8 +144,16 @@ function UserHome() {
       )}
       {selected && (
         <div className="note_selected">
-          {selected === "noteForm" && <NoteForm />}
-          {selected === "renderNote" && <RenderNote />}
+          <Switch>
+            <Route exact path={`${noteListPath}/new`}>
+              <NoteForm />
+            </Route>
+            <Route path={`${noteListPath}/:noteId`}>
+              <RenderNote />
+            </Route>
+          </Switch>
+          {/* {selected === "noteForm" && <NoteForm />} */}
+          {/* {selected === "renderNote" && <RenderNote />} */}
           {/* If there is no note, render "Create a Note" */}
           {/* If there is, render the note in the top of the list*/}
           {selected === "renderNotebook" && <div> render notebook</div>}

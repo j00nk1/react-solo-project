@@ -3,15 +3,15 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as noteActions from "../../store/note";
 
+import { useListContext } from "../../context/ListContexts";
+
 function NoteList({ props }) {
   const { noteListPath, id, notes } = props; //id === userId
   const history = useHistory();
   const dispatch = useDispatch();
-  // const info = useSelector(state => state.note);
 
-  // useEffect(() => {
-  //   console.log("what's in the info??", info);
-  // }, [info]);
+  const { setRenderNote } = useListContext();
+
   return (
     <>
       <h2 id="list_title">
@@ -22,10 +22,11 @@ function NoteList({ props }) {
           <li
             id={note.id}
             key={note.id}
-            onClick={() => {
-              dispatch(
+            onClick={async () => {
+              const fetchedNote = await dispatch(
                 noteActions.fetchSingleNote({ userId: id, noteId: note.id })
               );
+              setRenderNote(fetchedNote);
               return history.push(`${noteListPath}/${note.id}`);
             }}
           >

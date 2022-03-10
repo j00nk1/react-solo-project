@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { useListContext } from "../../context/ListContexts";
 import * as noteActions from "../../store/note";
 
 function RenderNote() {
   const dispatch = useDispatch();
-  const { userId } = useParams();
+  const path = useLocation().pathname;
+  const userId = path.split("/")[2];
+  const noteId = path.split("/")[4];
   const history = useHistory();
 
-  const { renderNote, setNotes } = useListContext();
-
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const { renderNote, setNotes, content, setContent, title, setTitle } =
+    useListContext();
+  // const originalContent = content.slice();
+  // const originalTitle = title.slice();
   const [notebookSelected, setNotebookSelected] = useState(null);
   const [errors, setErrors] = useState([]);
   const [submitClicked, setSubmitClicked] = useState(false);
@@ -38,19 +40,25 @@ function RenderNote() {
     e.preventDefault();
 
     if (!errors.length) {
-      await dispatch(noteActions.patchNote(renderNote));
+      console.log(path);
+      const editedNote = await dispatch(noteActions.patchNote(renderNote));
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
 
       setNotes(noteList.notes);
-      return await history.push(`/users/${userId}/notes/`);
+      return await history.push(`/users/${userId}/notes/${editedNote.id}`);
     }
   };
 
   const cancelBtn = async e => {
     if (content || title) {
       if (window.confirm("Are you sure you want to discard the change?")) {
-        setContent("");
-        setTitle("");
+        const originalNote = await dispatch(
+          noteActions.fetchSingleNote({ userId, noteId })
+        );
+
+        setContent(originalNote.content);
+        setTitle(originalNote.title);
+        // TODO: need to set originalNote's notebookId
         setNotebookSelected(null);
         setSubmitClicked(false);
       }
@@ -87,9 +95,10 @@ function RenderNote() {
         <button type="submit" onClick={() => setSubmitClicked(true)}>
           Update
         </button>
-        <button className="btn_alert" onClick={cancelBtn} type="reset">
-          Discard
+        <button onClick={cancelBtn} type="reset">
+          Cancel Edit
         </button>
+        <button className="btn_alert">Delete Note</button>
       </div>
     </form>
   );
