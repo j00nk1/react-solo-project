@@ -18,8 +18,10 @@ function NoteList({ props }) {
     const updatedYear = updatedAt.getFullYear();
     const updatedMonth = updatedAt.getMonth();
     const updatedDay = updatedAt.getDate();
-    const updatedHour = updatedAt.getHours();
-    const updatedMinutes = updatedAt.getMinutes();
+    let updatedHour = updatedAt.getHours();
+    let updatedMinutes = updatedAt.getMinutes();
+    if (updatedHour < 10) updatedHour = `0${updatedHour}`;
+    if (updatedMinutes < 10) updatedMinutes = `0${updatedMinutes}`;
 
     return `Update: ${
       updatedMonth + 1
