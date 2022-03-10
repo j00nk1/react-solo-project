@@ -37,6 +37,21 @@
   width: 16vw;
   align-items: stretch;
   text-align: center;
+  overflow-y: auto;
+}
+
+.side_list::-webkit-scrollbar {
+  width: 8px; /* width of the entire scrollbar */
+}
+
+.side_list::-webkit-scrollbar-track {
+  background: antiquewhite; /* color of the tracking area */
+}
+
+.side_list::-webkit-scrollbar-thumb {
+  border: #76bdf3 solid 1px;
+  background-color: #9bccf1; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
 }
 
 .side_list h2 {

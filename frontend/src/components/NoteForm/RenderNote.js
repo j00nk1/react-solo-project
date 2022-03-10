@@ -115,7 +115,7 @@ function RenderNote() {
         <button type="submit" onClick={() => setSubmitClicked(true)}>
           Update
         </button>
-        <button onClick={cancelBtn} type="reset">
+        <button className="btn_cancel" onClick={cancelBtn} type="reset">
           Cancel Edit
         </button>
         <button className="btn_alert" onClick={handleDelete}>

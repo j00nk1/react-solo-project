@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import EditNote from "./EditNote";
 import NewNote from "./NewNote";
 import "./NoteForm.css";
 
@@ -10,12 +9,7 @@ function NoteForm() {
   const [newForm, setNewForm] = useState(true);
   const [editForm, setEditForm] = useState(false);
 
-  return (
-    <>
-      {newForm && <NewNote />}
-      {editForm && <EditNote />}
-    </>
-  );
+  return <>{newForm && <NewNote />}</>;
 }
 
 export default NoteForm;
