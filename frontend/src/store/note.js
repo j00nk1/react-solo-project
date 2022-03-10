@@ -71,6 +71,8 @@ export const fetchNotes =
       const notes = await res.json();
       dispatch(loadNotes(notes));
       return notes;
+    } else {
+      return;
     }
   };
 

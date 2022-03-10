@@ -123,13 +123,13 @@ router.get(
       order: [["updatedAt", "DESC"]],
     });
 
-    if (notes.length > 0) {
-      return res.json({ notes });
-    } else {
-      const error = new Error("We could not find the notes");
-      error.status = 404;
-      next(error);
-    }
+    // if (notes.length > 0) {
+    return res.json({ notes });
+    //   } else {
+    //     const error = new Error("We could not find the notes");
+    //     error.status = 404;
+    //     next(error);
+    //   }
   })
 );
 

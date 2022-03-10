@@ -12,16 +12,40 @@ function NoteList({ props }) {
 
   const { setRenderNote } = useListContext();
 
+  const toTime = date => {
+    const updatedAt = new Date(date);
+    // const currentTime = new Date(date)
+    const updatedYear = updatedAt.getFullYear();
+    const updatedMonth = updatedAt.getMonth();
+    const updatedDay = updatedAt.getDate();
+    const updatedHour = updatedAt.getHours();
+    const updatedMinutes = updatedAt.getMinutes();
+
+    return `Update: ${
+      updatedMonth + 1
+    }/${updatedDay}/${updatedYear} ${updatedHour}:${updatedMinutes}`;
+  };
+
   return (
     <>
       <h2 id="list_title">
         <i className="fa-solid fa-note-sticky"></i> Notes
       </h2>
-      {notes.length &&
+      {!notes.length && (
+        <>
+          <h3>NO NOTES</h3>
+          <p>
+            <br />
+            Let's Start Creating!
+          </p>
+        </>
+      )}
+      {notes.length > 0 &&
         notes.map(note => (
           <li
             id={note.id}
             key={note.id}
+            style={{ position: "relative" }}
             onClick={async () => {
               const fetchedNote = await dispatch(
                 noteActions.fetchSingleNote({ userId: id, noteId: note.id })
@@ -31,10 +55,19 @@ function NoteList({ props }) {
             }}
           >
             {note.title}
-            <small>{note.updatedAt}</small>
+            <br />
+            <small
+              style={{
+                position: "absolute",
+                right: 0,
+                bottom: 0,
+                color: "gray",
+              }}
+            >
+              {toTime(note.updatedAt)}
+            </small>
           </li>
         ))}
-      <li onClick={() => dispatch(noteActions.fetchNotes({ userId: id }))}></li>
     </>
   );
 }

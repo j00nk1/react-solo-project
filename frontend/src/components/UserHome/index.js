@@ -81,7 +81,8 @@ function UserHome() {
 
     setShowNote(true);
     setShowNotebook(false);
-
+    const keys = Object.keys(noteList.notes);
+    if (!keys.length) return history.push(`${noteListPath}/new`);
     const recentNote = await dispatch(noteActions.fetchRecentNote({ userId }));
     setRenderNote(recentNote);
     const { id } = recentNote;
