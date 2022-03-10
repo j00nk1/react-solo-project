@@ -42,3 +42,9 @@ heroku run npm run sequelize db:migrate
 heroku run npm run sequelize db:seed:all
 
 ```
+
+**In case needing to reset database on heroku**
+
+```
+heroku pg:reset DATABASE
+```

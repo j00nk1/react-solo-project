@@ -6,6 +6,7 @@ import Landing from "./components/Landing";
 import SignupFormPage from "./components/SignupFormPage";
 import Navigation from "./components/Navigation";
 import UserHome from "./components/UserHome";
+import { ListProvider } from "./context/ListContexts";
 
 // ------------- Store files --------------
 import * as sessionActions from "./store/session";
@@ -29,7 +30,9 @@ function App() {
             <SignupFormPage />
           </Route>
           <Route path="/users/:userId" isLoaded={isLoaded}>
-            <UserHome />
+            <ListProvider>
+              <UserHome />
+            </ListProvider>
           </Route>
           <Route path="*">
             {/*TODO:Make Error handling components with sidebar <Error /> */}

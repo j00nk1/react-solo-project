@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import * as notebookActions from "../../store/notebook";
 
 function NotebookList({ props }) {
-  const { notePath, notebookPath, username, id } = props;
+  const { noteListPath, notebookListPath, username, id } = props;
   const dispatch = useDispatch();
 
   // const handleSubmit = async e => {

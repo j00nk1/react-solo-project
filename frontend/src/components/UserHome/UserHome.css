@@ -1,16 +1,13 @@
 .home_main {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-auto-rows: max-content;
+  display: flex;
+  /* grid-template-columns: 1fr 2fr;
+  grid-auto-rows: max-content; */
   justify-items: start;
 }
 
 .side_container {
   display: flex;
   height: 100vh;
-  grid-column-start: 1;
-  grid-column-end: 2;
-  width: 100%;
 }
 
 .sidebar {
@@ -37,8 +34,7 @@
   border-right: 1px solid #91c1e5;
   flex-direction: column;
   min-width: 150px;
-  width: 100%;
-  max-width: 230px;
+  width: 16vw;
   align-items: stretch;
   text-align: center;
 }

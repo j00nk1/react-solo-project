@@ -12,7 +12,7 @@ import { ModalProvider } from "./context/Modal";
 import { restoreCSRF, csrfFetch } from "./store/csrf";
 import * as sessionActions from "./store/session";
 import * as noteActions from "./store/note";
-import * as notebookActions from "./store/notebook"
+import * as notebookActions from "./store/notebook";
 
 // ------------- Initializing imported stuff ----------
 const store = configureStore();

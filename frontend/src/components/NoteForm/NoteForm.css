@@ -1,0 +1,42 @@
+.note_selected {
+  padding-left: 10px;
+  width: 60vw;
+}
+
+.note_selected input,
+.note_selected textarea {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  text-decoration: none;
+  text-align: left;
+  margin: auto 0;
+  padding: 10px;
+}
+
+.note_selected label {
+  margin: 15px 0 5px 0;
+}
+
+.note_selected input {
+  font-weight: bold;
+  font-size: larger;
+}
+
+.note_selected textarea {
+  outline: none;
+  resize: none;
+  font-size: large;
+  height: 50vh;
+}
+
+.form_btn_container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.form_btn_container button {
+  height: 40px;
+  width: 80px;
+}
