@@ -74,6 +74,18 @@ export const fetchNotes =
     }
   };
 
+export const fetchRecentNote =
+  ({ userId }) =>
+  async dispatch => {
+    const res = await csrfFetch(`/api/users/${userId}/notes/`);
+    if (res.ok) {
+      const notes = await res.json();
+      const note = notes.notes[0];
+      dispatch(loadSingleNote(note));
+      return note;
+    }
+  };
+
 // GET a note
 export const fetchSingleNote =
   ({ userId, noteId }) =>

@@ -8,9 +8,10 @@ import NoteList from "./NoteList";
 import NoteForm from "../NoteForm";
 import * as noteActions from "../../store/note";
 import "./UserHome.css";
+import RenderNote from "./RenderNote";
 
 function UserHome() {
-  const [selected, setSelected] = useState(true);
+  const [selected, setSelected] = useState("");
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -21,6 +22,8 @@ function UserHome() {
     setShowNotebook,
     notes,
     setNotes,
+    setRenderNote,
+    renderNote,
   } = useListContext();
   const sessionUser = useSelector(state => state?.session?.user);
   const { userId } = useParams();
@@ -46,30 +49,42 @@ function UserHome() {
 
   const homeOnClick = async e => {
     e.preventDefault();
+    setSelected("");
 
     setShowNote(false);
     setShowNotebook(false);
+
     history.push(userPath);
   };
 
   const createNoteOnClick = async e => {
     e.preventDefault();
+    setSelected("noteForm");
+    const noteList = await dispatch(noteActions.fetchNotes({ userId }));
+    setNotes(noteList.notes);
+    setShowNote(true);
+    setShowNotebook(false);
     history.push(`${noteListPath}/new`);
   };
 
   const noteListOnClick = async e => {
     e.preventDefault();
-
+    setSelected("renderNote");
     const noteList = await dispatch(noteActions.fetchNotes({ userId }));
     setNotes(noteList.notes);
 
     setShowNote(true);
     setShowNotebook(false);
+
+    const recentNote = await dispatch(noteActions.fetchRecentNote({ userId }));
+    setRenderNote(recentNote);
+
     history.push(`${noteListPath}`);
   };
 
   const notebookListOnClick = async e => {
     e.preventDefault();
+    setSelected("renderNotebook");
     setShowNotebook(true);
     setShowNote(false);
     history.push(`${notebookListPath}`);
@@ -100,22 +115,35 @@ function UserHome() {
             </button>
           </li>
         </ul>
-        <ul className="side_list">
-          {showNote && <NoteList props={{ noteListPath, id, notes }} />}
-          {showNotebook && (
+        {showNote && (
+          <ul className="side_list">
+            <NoteList props={{ noteListPath, id, notes }} />
+          </ul>
+        )}
+        {showNotebook && (
+          <ul className="side_list">
             <NotebookList
               props={{ noteListPath, notebookListPath, username, id }}
             />
-          )}
-        </ul>
+          </ul>
+        )}
       </div>
 
       {/* If the note list is selected, render selected note */}
-      <div className="note_selected">
-        <NoteForm />
-        {/* If there is no note, render "Create a Note" */}
-        {/* If there is, render the note in the top of the list*/}
-      </div>
+      {!selected && (
+        <h1 style={{ margin: "0 auto", paddingTop: "20px" }}>
+          Welcome back {username}!
+        </h1>
+      )}
+      {selected && (
+        <div className="note_selected">
+          {selected === "noteForm" && <NoteForm />}
+          {selected === "renderNote" && <RenderNote />}
+          {/* If there is no note, render "Create a Note" */}
+          {/* If there is, render the note in the top of the list*/}
+          {selected === "renderNotebook" && <div> render notebook</div>}
+        </div>
+      )}
 
       {/* If the notebook list is shown, render the list of the note from the selected notebook*/}
       <div className="note_list"></div>

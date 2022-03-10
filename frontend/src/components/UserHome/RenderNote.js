@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Redirect, useHistory, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 
 import { useListContext } from "../../context/ListContexts";
 import * as noteActions from "../../store/note";
 
-function NewNote() {
+function RenderNote() {
   const dispatch = useDispatch();
   const { userId } = useParams();
   const history = useHistory();
 
-  const { setNotes } = useListContext();
+  const { renderNote, setNotes } = useListContext();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [notebookSelected, setNotebookSelected] = useState(null);
   const [errors, setErrors] = useState([]);
   const [submitClicked, setSubmitClicked] = useState(false);
+
+  useEffect(() => {
+    setTitle(renderNote.title);
+    setContent(renderNote.content);
+  }, [renderNote]);
 
   // Error handling
   useEffect(() => {
@@ -30,8 +36,9 @@ function NewNote() {
   // Handle submit
   const handleSubmit = async e => {
     e.preventDefault();
+
     if (!errors.length) {
-      await dispatch(noteActions.addNote({ userId, title, content }));
+      await dispatch(noteActions.patchNote(renderNote));
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
 
       setNotes(noteList.notes);
@@ -78,7 +85,7 @@ function NewNote() {
       ></textarea>
       <div className="form_btn_container">
         <button type="submit" onClick={() => setSubmitClicked(true)}>
-          Submit
+          Update
         </button>
         <button className="btn_alert" onClick={cancelBtn} type="reset">
           Discard
@@ -88,4 +95,4 @@ function NewNote() {
   );
 }
 
-export default NewNote;
+export default RenderNote;
