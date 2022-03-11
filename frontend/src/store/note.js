@@ -64,9 +64,14 @@ export const addNote = note => async dispatch => {
 
 // GET all notes
 export const fetchNotes =
-  ({ userId }) =>
+  ({ userId, notebookId }) =>
   async dispatch => {
-    const res = await csrfFetch(`/api/users/${userId}/notes/`);
+    let res;
+    if (notebookId)
+      res = await csrfFetch(
+        `/api/users/${userId}/notebooks/${notebookId}/notes`
+      );
+    else res = await csrfFetch(`/api/users/${userId}/notes/`);
     if (res.ok) {
       const notes = await res.json();
       dispatch(loadNotes(notes));
@@ -76,6 +81,7 @@ export const fetchNotes =
     }
   };
 
+// GET the most recently updated note
 export const fetchRecentNote =
   ({ userId }) =>
   async dispatch => {
