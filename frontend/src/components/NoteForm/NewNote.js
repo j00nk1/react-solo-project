@@ -5,6 +5,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useListContext } from "../../context/ListContexts";
 import { useNotebookContext } from "../../context/NotebookContext";
 import * as noteActions from "../../store/note";
+import * as notebookActions from "../../store/notebook";
 
 function NewNote() {
   const dispatch = useDispatch();
@@ -13,11 +14,27 @@ function NewNote() {
   const history = useHistory();
 
   const { setNotes } = useListContext();
-  const { selectedNotebook, setSelectedNotebook } = useNotebookContext();
+  const {
+    selectedNotebook,
+    setSelectedNotebook,
+    notebookList,
+    setNotebookList,
+  } = useNotebookContext();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [errors, setErrors] = useState([]);
   const [submitClicked, setSubmitClicked] = useState(false);
+
+  useEffect(() => {
+    const loadNotebook = async () => {
+      const notebooks = await dispatch(
+        notebookActions.fetchNotebooks({ userId })
+      );
+      setNotebookList(notebooks);
+      setSelectedNotebook("");
+    };
+    loadNotebook();
+  }, [dispatch]);
 
   // Error handling
   useEffect(() => {
@@ -33,12 +50,15 @@ function NewNote() {
   const handleSubmit = async e => {
     e.preventDefault();
     if (!errors.length) {
-      await dispatch(noteActions.addNote({ userId, title, content }));
+      const notebookId = selectedNotebook;
+      await dispatch(
+        noteActions.addNote({ userId, title, content, notebookId })
+      );
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
       setNotes(noteList.notes);
       setContent("");
       setTitle("");
-      setSelectedNotebook(null);
+      setSelectedNotebook("");
       setSubmitClicked(false);
       return await history.push(`/users/${userId}/notes/new`);
     }
@@ -49,7 +69,7 @@ function NewNote() {
       if (window.confirm("Are you sure you want to discard the change?")) {
         setContent("");
         setTitle("");
-        setSelectedNotebook(null);
+        setSelectedNotebook("");
         setSubmitClicked(false);
       }
     }
@@ -65,9 +85,17 @@ function NewNote() {
         </ul>
       )}
       <label>Choose Notebook</label>
-      {/* TODO: Need to fetch the user's notebook list and render as the options */}
-      <select onChange={e => setSelectedNotebook(e.target.value)}>
-        <option value={null}>--Notebook--</option>
+      <select
+        onChange={e => setSelectedNotebook(e.target.value)}
+        value={selectedNotebook}
+      >
+        <option value={""}>--Notebook--</option>
+        {notebookList.length > 0 &&
+          notebookList.map(notebook => (
+            <option key={notebook.id} value={notebook.id}>
+              {notebook.title}
+            </option>
+          ))}
       </select>
 
       <input

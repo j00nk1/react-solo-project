@@ -24,13 +24,20 @@ function RenderNote() {
   } = useListContext();
   // const originalContent = content.slice();
   // const originalTitle = title.slice();
-  const { selectedNotebook, setSelectedNotebook } = useNotebookContext();
+  const {
+    selectedNotebook,
+    setSelectedNotebook,
+    notebookList,
+    setNotebookList,
+  } = useNotebookContext();
   const [errors, setErrors] = useState([]);
   const [submitClicked, setSubmitClicked] = useState(false);
 
   useEffect(() => {
     setTitle(renderNote.title);
     setContent(renderNote.content);
+    if (!renderNote.notebookId) return setSelectedNotebook("");
+    setSelectedNotebook(renderNote.notebookId);
   }, [renderNote]);
 
   // Error handling
@@ -49,8 +56,9 @@ function RenderNote() {
 
     if (!errors.length) {
       const id = noteId;
+      const notebookId = selectedNotebook;
       const editedNote = await dispatch(
-        noteActions.patchNote({ userId, id, title, content })
+        noteActions.patchNote({ userId, id, title, content, notebookId })
       );
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
       setNotes(noteList.notes);
@@ -67,7 +75,7 @@ function RenderNote() {
         setContent(originalNote.content);
         setTitle(originalNote.title);
         // TODO: need to set originalNote's notebookId
-        setSelectedNotebook(null);
+        setSelectedNotebook(originalNote.notebookId);
         setSubmitClicked(false);
       }
     }
@@ -99,9 +107,17 @@ function RenderNote() {
         </ul>
       )}
       <label>Choose Notebook</label>
-      {/* TODO: Need to fetch the user's notebook list and render as the options */}
-      <select onChange={e => setSelectedNotebook(e.target.value)}>
-        <option value={null}>--Notebook--</option>
+      <select
+        onChange={e => setSelectedNotebook(e.target.value)}
+        value={selectedNotebook}
+      >
+        <option value={""}>--Notebook--</option>
+        {notebookList.length > 0 &&
+          notebookList.map(notebook => (
+            <option key={notebook.id} value={notebook.id}>
+              {notebook.title}
+            </option>
+          ))}
       </select>
 
       <input

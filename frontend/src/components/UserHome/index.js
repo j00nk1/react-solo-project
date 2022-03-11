@@ -138,9 +138,12 @@ function UserHome() {
 
       {/* If the note list is selected, render selected note */}
       {!selected && (
-        <h1 style={{ margin: "0 auto", paddingTop: "20px" }}>
-          Welcome back {username}!
-        </h1>
+        <>
+          <Redirect to={`/users/${userId}`}></Redirect>
+          <h1 style={{ margin: "0 auto", paddingTop: "20px" }}>
+            Welcome back {username}!
+          </h1>
+        </>
       )}
       {selected && (
         <div className="note_selected">
