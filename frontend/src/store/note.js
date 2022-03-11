@@ -8,6 +8,7 @@ const LOAD_NOTES = "notes/loadNotes";
 const LOAD_SINGLE_NOTE = "notes/loadSingleNote";
 const UPDATE_NOTE = "notes/updateNote";
 const REMOVE_NOTE = "notes/removeNote";
+const REMOVE_STATE = "notes/removeState";
 
 // ---------------- Action Creators -----------
 const createNote = newNote => {
@@ -42,6 +43,12 @@ const removeNote = note => {
   return {
     type: REMOVE_NOTE,
     note,
+  };
+};
+
+const removeState = () => {
+  return {
+    type: REMOVE_STATE,
   };
 };
 
@@ -139,6 +146,12 @@ export const deleteNote = note => async dispatch => {
   return deletedNote;
 };
 
+// Remove states when logout
+export const removeNoteState = () => dispatch => {
+  dispatch(removeState());
+  return;
+};
+
 // --------------- Reducer ----------------
 const initialState = { note: null };
 
@@ -172,6 +185,10 @@ const noteReducer = (state = initialState, action) => {
     case REMOVE_NOTE:
       newState = { ...state };
       delete newState[action.payload];
+      return newState;
+    case REMOVE_STATE:
+      newState = Object.assign({}, state);
+      newState = { note: null };
       return newState;
     default:
       return state;
