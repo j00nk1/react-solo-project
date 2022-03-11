@@ -5,9 +5,20 @@ export const NotebookContext = React.createContext();
 export const useNotebookContext = () => useContext(NotebookContext);
 
 export function NotebookProvider({ children }) {
-  const [selectedNotebook, setSelectedNotebook] = useState(null);
+  const [selectedNotebook, setSelectedNotebook] = useState("");
+  const [notebookTitle, setNotebookTitle] = useState("");
+  const [notebookList, setNotebookList] = useState([]);
   return (
-    <NotebookContext.Provider value={{ selectedNotebook, setSelectedNotebook }}>
+    <NotebookContext.Provider
+      value={{
+        selectedNotebook,
+        setSelectedNotebook,
+        notebookTitle,
+        setNotebookTitle,
+        notebookList,
+        setNotebookList,
+      }}
+    >
       {children}
     </NotebookContext.Provider>
   );

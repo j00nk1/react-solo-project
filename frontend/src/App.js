@@ -31,11 +31,11 @@ function App() {
             <SignupFormPage />
           </Route>
           <Route path="/users/:userId" isLoaded={isLoaded}>
-            <NotebookProvider>
-              <ListProvider>
+            <ListProvider>
+              <NotebookProvider>
                 <UserHome />
-              </ListProvider>
-            </NotebookProvider>
+              </NotebookProvider>
+            </ListProvider>
           </Route>
           <Route path="*">
             {/*TODO:Make Error handling components with sidebar <Error /> */}
