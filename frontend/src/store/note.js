@@ -76,7 +76,6 @@ export const fetchNotes =
     if (res.ok) {
       const notes = await res.json();
       dispatch(loadNotes(notes));
-      console.log("##########", notes); // returning array of notes
 
       return notes;
     } else {

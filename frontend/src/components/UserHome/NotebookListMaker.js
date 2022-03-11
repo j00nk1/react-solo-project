@@ -13,6 +13,8 @@ export const NotebookListMaker = fetchedNotebooks => {
 
   const trash = e => {
     // delete notebook and associated notes
+    console.log("clicked");
+    console.log(e.target);
   };
 
   return (
@@ -22,17 +24,21 @@ export const NotebookListMaker = fetchedNotebooks => {
           <label htmlFor={`nb_${nb.id}`}>
             {nb.title}{" "}
             {idx > 0 && (
-              <i className="fa-solid fa-trash-can" onClick={trash}></i>
+              <i
+                className="fa-solid fa-trash-can"
+                id={nb.id}
+                onClick={trash}
+              ></i>
             )}
           </label>
-          <input type="checkbox" id={`nb_${nb.id}`} className="nb_input" />
+          <input type="checkbox" className="nb_input" />
           <ul className="noteShow" style={{ flexDirection: "column" }}>
-            <li>test</li>
-            <li>test2</li>
+            {/* <li>test</li>
+            <li>test2</li> */}
           </ul>
-          {/* <NotebookChildren
+          <NotebookChildren
             props={{ userId, notebookId: nb.id }}
-          ></NotebookChildren> */}
+          ></NotebookChildren>
         </ul>
       ))}
     </>
