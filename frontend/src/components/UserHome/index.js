@@ -159,7 +159,7 @@ function UserHome() {
           {/* {selected === "renderNote" && <RenderNote />} */}
           {/* If there is no note, render "Create a Note" */}
           {/* If there is, render the note in the top of the list*/}
-          {selected === "renderNotebook" && <div> render notebook</div>}
+          {selected === "renderNotebook" && <div> render a note</div>}
         </div>
       )}
 
