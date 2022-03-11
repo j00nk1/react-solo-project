@@ -291,8 +291,7 @@ router.get(
       },
       order: [["updatedAt", "DESC"]],
     });
-
-    return res.json(notes);
+    return res.json({ notes });
   })
 );
 

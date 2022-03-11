@@ -1,9 +1,15 @@
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+
+import { useListContext } from "../../context/ListContexts";
+import NotebookChildren from "./NotebookChildren";
+import * as noteActions from "../../store/note";
 import "./NotebookListMaker.css";
 
-export const NotebookListMaker = (fetchedNotebooks, fetchedNotes) => {
-  const onclick = e => {
-    // things to do when clicked on the li
-  };
+export const NotebookListMaker = fetchedNotebooks => {
+  const dispatch = useDispatch();
+  const { userId } = useParams();
 
   const trash = e => {
     // delete notebook and associated notes
@@ -16,7 +22,7 @@ export const NotebookListMaker = (fetchedNotebooks, fetchedNotes) => {
           <label htmlFor={`nb_${nb.id}`}>
             {nb.title}{" "}
             {idx > 0 && (
-              <i className="fa-solid fa-trash-can" onclick={trash}></i>
+              <i className="fa-solid fa-trash-can" onClick={trash}></i>
             )}
           </label>
           <input type="checkbox" id={`nb_${nb.id}`} className="nb_input" />
@@ -24,12 +30,9 @@ export const NotebookListMaker = (fetchedNotebooks, fetchedNotes) => {
             <li>test</li>
             <li>test2</li>
           </ul>
-          {fetchedNotes > 0 &&
-            fetchedNotes.map(note => (
-              <ul className="noteShow">
-                <li onclick={onclick}>{note.title}</li>
-              </ul>
-            ))}
+          {/* <NotebookChildren
+            props={{ userId, notebookId: nb.id }}
+          ></NotebookChildren> */}
         </ul>
       ))}
     </>

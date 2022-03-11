@@ -62,7 +62,7 @@ export const addNote = note => async dispatch => {
   return data;
 };
 
-// GET all notes
+// GET all notes OR notebook's notes
 export const fetchNotes =
   ({ userId, notebookId }) =>
   async dispatch => {
@@ -72,9 +72,12 @@ export const fetchNotes =
         `/api/users/${userId}/notebooks/${notebookId}/notes`
       );
     else res = await csrfFetch(`/api/users/${userId}/notes/`);
+
     if (res.ok) {
       const notes = await res.json();
       dispatch(loadNotes(notes));
+      console.log("##########", notes); // returning array of notes
+
       return notes;
     } else {
       return;
