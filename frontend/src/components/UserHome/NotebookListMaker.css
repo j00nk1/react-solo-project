@@ -35,10 +35,11 @@
   position: relative;
   height: 100%;
   opacity: 1;
-  transition: all 0.8s;
+  transition: opacity 1s ease;
   cursor: pointer;
 }
 
-.nb_input:checked + .noteShow:hover {
+.noteShow li:hover {
   background: #a2d7ff;
+  transition: 1s ease;
 }

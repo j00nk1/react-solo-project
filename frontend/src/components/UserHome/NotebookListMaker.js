@@ -11,8 +11,9 @@ export const NotebookListMaker = (fetchedNotebooks, fetchedNotes) => {
         <ul key={`nb_${nb.id}`} className="side_list nb_box">
           <label htmlFor={`nb_${nb.id}`}>{nb.title}</label>
           <input type="checkbox" id={`nb_${nb.id}`} className="nb_input" />
-          <ul className="noteShow">
+          <ul className="noteShow" style={{ flexDirection: "column" }}>
             <li>test</li>
+            <li>test2</li>
           </ul>
           {fetchedNotes > 0 &&
             fetchedNotes.map(note => (

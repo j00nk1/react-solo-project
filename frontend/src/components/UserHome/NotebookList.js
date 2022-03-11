@@ -19,14 +19,14 @@ function NotebookList({ props }) {
   const [noteList, setNoteList] = useState([]);
 
   useEffect(() => {
-    const loadNotebooks = async () => {
+    const loadNoteAndNb = async () => {
       const notebooks = await dispatch(
         notebookActions.fetchNotebooks({ userId })
       );
       await setNotebookList(notebooks);
       // TODO: render notes based on notebookId
     };
-    loadNotebooks();
+    loadNoteAndNb();
   }, [dispatch]);
 
   // const handleSubmit = async e => {
@@ -39,7 +39,7 @@ function NotebookList({ props }) {
   return (
     <>
       <h2 id="list_title">
-        <i className="fa-solid fa-book"></i> Notebook
+        <i className="fa-solid fa-book"></i> Notebooks
       </h2>
       {NotebookListMaker(notebookList)}
     </>
