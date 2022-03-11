@@ -26,6 +26,36 @@ module.exports = {
           title: "FakeUser2's Notebook",
           isMain: true,
         },
+        {
+          userId: 1,
+          title: "Extra Notebook",
+          isMain: false,
+        },
+        {
+          userId: 1,
+          title: "DELETE ME",
+          isMain: false,
+        },
+        {
+          userId: 2,
+          title: "Custom",
+          isMain: false,
+        },
+        {
+          userId: 2,
+          title: "You can delete",
+          isMain: false,
+        },
+        {
+          userId: 3,
+          title: "Test notebook",
+          isMain: false,
+        },
+        {
+          userId: 1,
+          title: "Delete Me 2",
+          isMain: false,
+        },
       ],
       {}
     );

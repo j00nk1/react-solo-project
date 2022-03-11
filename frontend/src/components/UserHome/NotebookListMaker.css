@@ -1,0 +1,44 @@
+.nb_box label {
+  display: block;
+  margin: 1.5px 0;
+  padding: 11px 12px;
+  font-weight: bold;
+  background: #eaeaea;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+.nb_box label:hover {
+  background: #a2d7ff;
+}
+
+.nb_box input {
+  display: none;
+}
+
+.nb_box .noteShow {
+  height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  opacity: 0;
+  position: absolute;
+  transition: 0s;
+}
+
+.noteShow li {
+  width: 100%;
+}
+
+.nb_input:checked + .noteShow {
+  height: auto;
+  position: relative;
+  height: 100%;
+  opacity: 1;
+  transition: all 0.8s;
+  cursor: pointer;
+}
+
+.nb_input:checked + .noteShow:hover {
+  background: #a2d7ff;
+}
