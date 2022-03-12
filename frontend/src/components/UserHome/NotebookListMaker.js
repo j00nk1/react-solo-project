@@ -31,14 +31,16 @@ export const NotebookListMaker = fetchedNotebooks => {
               ></i>
             )}
           </label>
-          <input type="checkbox" className="nb_input" />
+          <input type="checkbox" id={`nb_${nb.id}`} className="nb_input" />
+          {/* <ul className="noteShow" style={{ flexDirection: "column" }}>
+            <li>test</li>
+            <li>test2</li>
+          </ul> */}
           <ul className="noteShow" style={{ flexDirection: "column" }}>
-            {/* <li>test</li>
-            <li>test2</li> */}
+            <NotebookChildren
+              props={{ userId, notebookId: nb.id }}
+            ></NotebookChildren>
           </ul>
-          <NotebookChildren
-            props={{ userId, notebookId: nb.id }}
-          ></NotebookChildren>
         </ul>
       ))}
     </>
