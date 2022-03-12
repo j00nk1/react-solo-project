@@ -10,12 +10,13 @@ function NotebookChildren({ props }) {
   const dispatch = useDispatch();
   const { setRenderNote } = useListContext();
 
-  const notesObj = useSelector(state => state.note);
+  const notesObj = useSelector(state => state);
   console.log(notesObj);
-
   // const matchingNotes = Object.values(notesObj).filter(
   //   note => note.notebookId === notebookId
   // );
+  console.log();
+
   const user = useSelector(state => state.session.user);
 
   // const notesFetch = dispatch(noteActions.fetchNotes({ userId, notebookId }));

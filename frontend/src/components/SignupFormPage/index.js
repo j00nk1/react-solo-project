@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 import * as sessionActions from "../../store/session";
+import * as noteActions from "../../store/note";
+import * as notebookActions from "../../store/notebook";
 import "./SignupForm.css";
 
 function SignupFormPage() {
@@ -34,12 +36,14 @@ function SignupFormPage() {
 
   const demoLogin = e => {
     e.preventDefault();
-    return dispatch(
+    dispatch(
       sessionActions.login({
         credential: "Demo-User",
         password: "password",
       })
     );
+    dispatch(noteActions.fetchNotes({ userId: 1 }));
+    dispatch(notebookActions.fetchNotebooks({ userId: 1 }));
   };
 
   return (
