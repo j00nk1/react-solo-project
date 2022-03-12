@@ -1,3 +1,6 @@
+.side_list.nb_box {
+  overflow-y: unset;
+}
 .nb_box label {
   display: block;
   margin: 1.5px 0;
