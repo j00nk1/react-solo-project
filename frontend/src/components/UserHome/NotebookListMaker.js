@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
-import { useListContext } from "../../context/ListContexts";
 import NotebookChildren from "./NotebookChildren";
-import * as noteActions from "../../store/note";
 import * as notebookActions from "../../store/notebook";
 import { useNotebookContext } from "../../context/NotebookContext";
 import "./NotebookListMaker.css";

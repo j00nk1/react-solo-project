@@ -11,6 +11,7 @@ import { NotebookProvider } from "./context/NotebookContext";
 
 // ------------- Store files --------------
 import * as sessionActions from "./store/session";
+import Errors from "./components/Errors";
 
 function App() {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function App() {
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
+  const pageError = [];
 
   return (
     <>
@@ -39,7 +41,7 @@ function App() {
           </Route>
           <Route path="*">
             {/*TODO:Make Error handling components with sidebar <Error /> */}
-            <h2>Page Not Found</h2>
+            <Errors props={pageError} />
           </Route>
         </Switch>
       )}
