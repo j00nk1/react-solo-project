@@ -11,14 +11,9 @@ function NotebookChildren({ props }) {
   const { setRenderNote } = useListContext();
 
   const notesObj = useSelector(state => state.note);
-  const objectArray = Object.values(notesObj);
-  console.log(objectArray);
-  // const matchingNotes = Object.values(notesObj).filter(
-  //   note => note.notebookId === +notebookId
-  // );
-  // console.log(">>>>>>>>>>", matchingNotes);
-
-  const user = useSelector(state => state.session.user);
+  const matchingNotes = Object.values(notesObj).filter(
+    note => note?.notebookId === +notebookId
+  );
 
   // const notesFetch = dispatch(noteActions.fetchNotes({ userId, notebookId }));
 
@@ -26,22 +21,24 @@ function NotebookChildren({ props }) {
   // console.log("++++++++++++++++++++++++++", notes); // return Promise {<pending>}
   return (
     <>
-      {/* <ul className="noteShow">
-        {notes.map(note => (
-          <li
-            key={`note_${note.id}`}
-            onClick={async () => {
-              const fetchedNote = await dispatch(
-                noteActions.fetchSingleNote({ userId, noteId: note.id })
-              );
-              setRenderNote(fetchedNote);
-              return history.push(`/users/${userId}/notes/${note.id}`);
-            }}
-          >
-            {note.title}
-          </li>
-        ))}
-      </ul> */}
+      {matchingNotes.length > 0 && (
+        <>
+          {matchingNotes.map(note => (
+            <li
+              key={`note_${note.id}`}
+              onClick={async () => {
+                const fetchedNote = await dispatch(
+                  noteActions.fetchSingleNote({ userId, noteId: note.id })
+                );
+                setRenderNote(fetchedNote);
+                return history.push(`/users/${userId}/notes/${note.id}`);
+              }}
+            >
+              {note.title}
+            </li>
+          ))}
+        </>
+      )}
     </>
   );
 }
