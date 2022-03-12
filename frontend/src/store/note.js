@@ -8,6 +8,7 @@ const LOAD_NOTES = "notes/loadNotes";
 const LOAD_SINGLE_NOTE = "notes/loadSingleNote";
 const UPDATE_NOTE = "notes/updateNote";
 const REMOVE_NOTE = "notes/removeNote";
+const REMOVE_STATE = "notes/removeState";
 
 // ---------------- Action Creators -----------
 const createNote = newNote => {
@@ -45,6 +46,12 @@ const removeNote = note => {
   };
 };
 
+const removeState = () => {
+  return {
+    type: REMOVE_STATE,
+  };
+};
+
 // ---------------- Thunk Actions -------------
 // POST
 export const addNote = note => async dispatch => {
@@ -62,20 +69,28 @@ export const addNote = note => async dispatch => {
   return data;
 };
 
-// GET all notes
+// GET all notes OR notebook's notes
 export const fetchNotes =
-  ({ userId }) =>
+  ({ userId, notebookId }) =>
   async dispatch => {
-    const res = await csrfFetch(`/api/users/${userId}/notes/`);
+    let res;
+    if (notebookId)
+      res = await csrfFetch(
+        `/api/users/${userId}/notebooks/${notebookId}/notes`
+      );
+    else res = await csrfFetch(`/api/users/${userId}/notes/`);
+
     if (res.ok) {
       const notes = await res.json();
       dispatch(loadNotes(notes));
+
       return notes;
     } else {
       return;
     }
   };
 
+// GET the most recently updated note
 export const fetchRecentNote =
   ({ userId }) =>
   async dispatch => {
@@ -131,8 +146,14 @@ export const deleteNote = note => async dispatch => {
   return deletedNote;
 };
 
+// Remove states when logout
+export const removeNoteState = () => dispatch => {
+  dispatch(removeState());
+  return;
+};
+
 // --------------- Reducer ----------------
-const initialState = { note: null };
+const initialState = {};
 
 const noteReducer = (state = initialState, action) => {
   let newState;
@@ -164,6 +185,10 @@ const noteReducer = (state = initialState, action) => {
     case REMOVE_NOTE:
       newState = { ...state };
       delete newState[action.payload];
+      return newState;
+    case REMOVE_STATE:
+      newState = Object.assign({}, state);
+      newState = { note: null };
       return newState;
     default:
       return state;

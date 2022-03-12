@@ -24,7 +24,9 @@ function LoginForm() {
         return data;
       }
     });
-    if (info?.user?.id) return history.push(`/users/${info.user.id}`);
+    if (info?.user?.id) {
+      return history.push(`/users/${info.user.id}`);
+    }
   };
 
   const demoLogin = async e => {

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 import * as sessionActions from "../../store/session";
+
 import "./SignupForm.css";
 
 function SignupFormPage() {
@@ -34,7 +35,7 @@ function SignupFormPage() {
 
   const demoLogin = e => {
     e.preventDefault();
-    return dispatch(
+    dispatch(
       sessionActions.login({
         credential: "Demo-User",
         password: "password",

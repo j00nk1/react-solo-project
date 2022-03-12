@@ -7,6 +7,7 @@ const CREATE_NOTEBOOK = "notes/createNotebook";
 const LOAD_NOTEBOOKS = "notes/loadNotebooks";
 const LOAD_SINGLE_NOTEBOOK = "notes/loadSingleNotebook";
 const REMOVE_NOTEBOOK = "notes/removeNotebook";
+const REMOVE_NOTEBOOK_STATE = "notes/removeNotebookState";
 
 // ---------------- Action Creators -----------
 const createNotebook = newNotebook => {
@@ -34,6 +35,12 @@ const removeNotebook = notebook => {
   return {
     type: REMOVE_NOTEBOOK,
     notebook,
+  };
+};
+
+const removeState = () => {
+  return {
+    type: REMOVE_NOTEBOOK_STATE,
   };
 };
 
@@ -100,8 +107,13 @@ export const deleteNotebook =
     return deletedNotebook;
   };
 
+// Remove states upon logout
+export const removeNotebookState = () => dispatch => {
+  dispatch(removeState());
+  return;
+};
 // --------------- Reducer ----------------
-const initialState = { notebook: null };
+const initialState = {};
 
 const notebookReducer = (state = initialState, action) => {
   let newState;
@@ -127,6 +139,10 @@ const notebookReducer = (state = initialState, action) => {
     case REMOVE_NOTEBOOK:
       newState = { ...state };
       delete newState[action.payload];
+      return newState;
+    case REMOVE_NOTEBOOK_STATE:
+      newState = Object.assign({}, state);
+      newState = { notebook: null };
       return newState;
     default:
       return state;

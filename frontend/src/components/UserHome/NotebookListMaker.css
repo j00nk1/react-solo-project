@@ -1,3 +1,10 @@
+.side_list {
+  overflow-x: clip;
+}
+
+.side_list.nb_box {
+  overflow-y: unset;
+}
 .nb_box label {
   display: block;
   margin: 1.5px 0;
@@ -42,4 +49,8 @@
 .noteShow li:hover {
   background: #a2d7ff;
   transition: 1s ease;
+}
+
+.fa-trash-can:hover {
+  color: red;
 }
