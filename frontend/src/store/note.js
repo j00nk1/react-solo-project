@@ -153,7 +153,7 @@ export const removeNoteState = () => dispatch => {
 };
 
 // --------------- Reducer ----------------
-const initialState = { note: null };
+const initialState = {};
 
 const noteReducer = (state = initialState, action) => {
   let newState;

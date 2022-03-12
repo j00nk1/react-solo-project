@@ -113,7 +113,7 @@ export const removeNotebookState = () => dispatch => {
   return;
 };
 // --------------- Reducer ----------------
-const initialState = { notebook: null };
+const initialState = {};
 
 const notebookReducer = (state = initialState, action) => {
   let newState;

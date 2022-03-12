@@ -11,7 +11,8 @@ function NotebookChildren({ props }) {
   const { setRenderNote } = useListContext();
 
   const notesObj = useSelector(state => state.note);
-  console.log(notesObj);
+  const objectArray = Object.values(notesObj);
+  console.log(objectArray);
   // const matchingNotes = Object.values(notesObj).filter(
   //   note => note.notebookId === +notebookId
   // );
