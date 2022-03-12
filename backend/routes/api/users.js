@@ -166,7 +166,7 @@ router.get(
     });
 
     // if (notes.length > 0) {
-    return res.json({ notes });
+    return res.json(notes);
     //   } else {
     //     const error = new Error("We could not find the notes");
     //     error.status = 404;
@@ -284,14 +284,14 @@ router.get(
   asyncHandler(async (req, res, next) => {
     const { userId, notebookId } = await req.params;
 
-    const notes = await Note.findAll({
+    const notes = await Note.findOne({
       where: {
         userId,
         notebookId,
       },
       order: [["updatedAt", "DESC"]],
     });
-    return res.json({ notes });
+    return res.json(notes);
   })
 );
 

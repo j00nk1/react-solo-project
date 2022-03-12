@@ -70,7 +70,7 @@ function UserHome() {
     e.preventDefault();
     setSelected("noteForm");
     const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-    setNotes(noteList.notes);
+    setNotes(noteList);
     setShowNote(true);
     setShowNotebook(false);
     history.push(`${noteListPath}/new`);
@@ -80,11 +80,11 @@ function UserHome() {
     e.preventDefault();
     setSelected("renderNote");
     const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-    setNotes(noteList.notes);
+    setNotes(noteList);
 
     setShowNote(true);
     setShowNotebook(false);
-    const keys = Object.keys(noteList.notes);
+    const keys = Object.keys(noteList);
     if (!keys.length) return history.push(`${noteListPath}/new`);
     const recentNote = await dispatch(noteActions.fetchRecentNote({ userId }));
     setRenderNote(recentNote);

@@ -64,7 +64,7 @@ function RenderNote() {
       const nbList = await dispatch(notebookActions.fetchNotebooks({ userId }));
       setNotebookList(nbList);
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-      setNotes(noteList.notes);
+      setNotes(noteList);
 
       return await history.push(`/users/${userId}/notes/${editedNote.id}`);
     }
@@ -90,8 +90,10 @@ function RenderNote() {
       await dispatch(noteActions.deleteNote({ userId, noteId }));
 
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-
       setNotes(noteList.notes);
+      const nbList = await dispatch(notebookActions.fetchNotebooks({ userId }));
+      setNotebookList(nbList);
+      if (!noteList?.length) return setRenderNote({});
       const recentNote = await dispatch(
         noteActions.fetchRecentNote({ userId })
       );

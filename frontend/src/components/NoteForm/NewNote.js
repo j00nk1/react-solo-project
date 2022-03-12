@@ -55,7 +55,7 @@ function NewNote() {
         noteActions.addNote({ userId, title, content, notebookId })
       );
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-      setNotes(noteList.notes);
+      setNotes(noteList);
       setContent("");
       setTitle("");
       setSelectedNotebook("");
