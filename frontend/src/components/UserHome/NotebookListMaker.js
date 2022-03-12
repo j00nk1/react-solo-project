@@ -5,16 +5,29 @@ import { useHistory, useParams } from "react-router-dom";
 import { useListContext } from "../../context/ListContexts";
 import NotebookChildren from "./NotebookChildren";
 import * as noteActions from "../../store/note";
+import * as notebookActions from "../../store/notebook";
+import { useNotebookContext } from "../../context/NotebookContext";
 import "./NotebookListMaker.css";
 
 export const NotebookListMaker = fetchedNotebooks => {
   const dispatch = useDispatch();
   const { userId } = useParams();
+  const history = useHistory();
+  const { setNotebookList } = useNotebookContext();
 
-  const trash = e => {
+  const trash = async e => {
     // delete notebook and associated notes
-    console.log("clicked");
-    console.log(e.target);
+    const notebookId = e.target.id;
+    if (
+      window.confirm(
+        "Are you sure you want to DELETE the notebook? (All the notes in this notebook will be deleted too)"
+      )
+    ) {
+      await dispatch(notebookActions.deleteNotebook({ userId, notebookId }));
+      const nbList = await dispatch(notebookActions.fetchNotebooks({ userId }));
+      setNotebookList(nbList);
+      await history.push(`users/${userId}/notebooks`);
+    }
   };
 
   return (
