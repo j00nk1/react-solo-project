@@ -3,8 +3,6 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 import * as sessionActions from "../../store/session";
-import * as noteActions from "../../store/note";
-import * as notebookActions from "../../store/notebook";
 
 function LoginForm() {
   const dispatch = useDispatch();
@@ -27,9 +25,6 @@ function LoginForm() {
       }
     });
     if (info?.user?.id) {
-      await dispatch(noteActions.fetchNotes({ userId: info.user.id }));
-      await dispatch(notebookActions.fetchNotebooks({ userId: info.user.id }));
-
       return history.push(`/users/${info.user.id}`);
     }
   };
@@ -42,8 +37,6 @@ function LoginForm() {
         password: "password",
       })
     );
-    await dispatch(noteActions.fetchNotes({ userId: 1 }));
-    await dispatch(notebookActions.fetchNotebooks({ userId: 1 }));
     return history.push(`/users/1`);
   };
 

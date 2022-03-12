@@ -13,6 +13,8 @@ import NotebookList from "./NotebookList";
 import NoteList from "./NoteList";
 import NoteForm from "../NoteForm";
 import * as noteActions from "../../store/note";
+import * as notebookActions from "../../store/notebook";
+
 import "./UserHome.css";
 import RenderNote from "../NoteForm/RenderNote";
 
@@ -41,6 +43,8 @@ function UserHome() {
 
     if (id !== +userId)
       throw new Error("You are not authorized to see this page");
+    dispatch(noteActions.fetchNotes({ userId }));
+    dispatch(notebookActions.fetchNotebooks({ userId }));
   } catch (e) {
     console.error(e);
 
