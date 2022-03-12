@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
 
 import { useNotebookContext } from "../../context/NotebookContext";
 import { NotebookListMaker } from "./NotebookListMaker";
 import * as notebookActions from "../../store/notebook";
 import { Modal } from "../../context/Modal";
 import CreateNotebook from "../NotebookModal/CreateNotebook";
-import * as noteActions from "../../store/note";
 
 function NotebookList({ props }) {
   // const { noteListPath, notebookListPath, username, id } = props;
@@ -16,9 +14,7 @@ function NotebookList({ props }) {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
 
-  const { notebookTitle, setNotebookTitle, notebookList, setNotebookList } =
-    useNotebookContext();
-  const [selectedNotebook, setSelectedNotebook] = useState([]);
+  const { notebookList, setNotebookList } = useNotebookContext();
 
   useEffect(() => {
     const loadNotebook = async () => {
@@ -43,7 +39,7 @@ function NotebookList({ props }) {
         <i className="fa-solid fa-book"></i> Notebooks
       </h2>
       <button
-        style={{ borderRadius: 0, background: "steelblue" }}
+        style={{ borderRadius: 0, background: "steelblue", minHeight: "30px" }}
         onClick={() => setShowModal(true)}
       >
         Add Notebook <i className="fa-solid fa-folder-plus"></i>

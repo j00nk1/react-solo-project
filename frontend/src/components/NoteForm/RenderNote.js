@@ -5,6 +5,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useListContext } from "../../context/ListContexts";
 import { useNotebookContext } from "../../context/NotebookContext";
 import * as noteActions from "../../store/note";
+import * as notebookActions from "../../store/notebook";
 
 function RenderNote() {
   const dispatch = useDispatch();
@@ -56,12 +57,15 @@ function RenderNote() {
 
     if (!errors.length) {
       const id = noteId;
-      const notebookId = selectedNotebook;
+      const notebookId = +selectedNotebook;
       const editedNote = await dispatch(
         noteActions.patchNote({ userId, id, title, content, notebookId })
       );
+      const nbList = await dispatch(notebookActions.fetchNotebooks({ userId }));
+      setNotebookList(nbList);
       const noteList = await dispatch(noteActions.fetchNotes({ userId }));
       setNotes(noteList.notes);
+
       return await history.push(`/users/${userId}/notes/${editedNote.id}`);
     }
   };
@@ -74,7 +78,6 @@ function RenderNote() {
         );
         setContent(originalNote.content);
         setTitle(originalNote.title);
-        // TODO: need to set originalNote's notebookId
         setSelectedNotebook(originalNote.notebookId);
         setSubmitClicked(false);
       }
