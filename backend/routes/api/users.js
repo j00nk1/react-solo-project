@@ -79,9 +79,7 @@ router.get(
       where: { userId },
     });
 
-    const mainNotebook = notebookList.filter(notebook => notebook.isMain)[0];
-
-    return res.json({ notebookList, mainNotebook });
+    return res.json(notebookList);
   })
 );
 
@@ -140,7 +138,7 @@ router.delete(
 
     if (notebook) {
       await notebook.destroy();
-      return res.json(`"${notebook.title}" has been Successfully deleted.`);
+      return res.json(notebook);
     } else {
       const error = new Error(
         "Something went wrong! We could not find the notebook..."
@@ -234,7 +232,7 @@ router.patch(
 
     if (note) {
       const { title, content } = await req.body;
-      let notebookId = null;
+      let notebookId = "";
       if (await req.body.notebookId) {
         notebookId = await req.body.notebookId;
       }
@@ -266,7 +264,7 @@ router.delete(
 
     if (note) {
       await note.destroy();
-      return res.json(`"${note.title}" has been Successfully deleted.`);
+      return res.json(note);
     } else {
       const error = new Error(
         "Something went wrong! We could not find the note..."

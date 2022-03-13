@@ -46,7 +46,7 @@ function NoteList({ props }) {
         notes.map(note => (
           <li
             id={note.id}
-            key={note.id}
+            key={`${note.title}_${note.id}`}
             style={{ position: "relative" }}
             onClick={async () => {
               const fetchedNote = await dispatch(

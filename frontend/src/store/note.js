@@ -56,7 +56,7 @@ const removeState = () => {
 // POST
 export const addNote = note => async dispatch => {
   const { userId, title, content } = note;
-  let notebookId = null;
+  let notebookId = "";
   if (note.notebookId) {
     notebookId = note.notebookId;
   }
@@ -118,7 +118,7 @@ export const fetchSingleNote =
 // UPDATE a note
 export const patchNote = note => async dispatch => {
   const { userId, id, title, content } = note;
-  let notebookId = null;
+  let notebookId = "";
   if (note.notebookId) {
     notebookId = note.notebookId;
   }
@@ -145,7 +145,6 @@ export const deleteNote = note => async dispatch => {
   const deletedNote = await res.json();
 
   dispatch(removeNote(deletedNote));
-  return deletedNote;
 };
 
 // Remove states when logout
@@ -166,6 +165,7 @@ const noteReducer = (state = initialState, action) => {
       return newState;
 
     case LOAD_NOTES:
+      // TODO try delete the state
       newState = { ...state };
       if (!action.notes) return newState;
       action.notes.forEach(note => (newState[note.id] = note));
@@ -183,9 +183,6 @@ const noteReducer = (state = initialState, action) => {
 
     case REMOVE_NOTE:
       newState = { ...state };
-      console.log("in action", newState);
-      console.log("in action", action.note.id);
-
       delete newState[action.note.id];
       return newState;
 

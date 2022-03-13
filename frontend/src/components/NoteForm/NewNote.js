@@ -80,7 +80,7 @@ function NewNote() {
       {errors.length > 0 && submitClicked && (
         <ul className="error">
           {errors.map((err, idx) => (
-            <li key={idx}>{err}</li>
+            <li key={`err_${idx}`}>{err}</li>
           ))}
         </ul>
       )}
@@ -92,7 +92,7 @@ function NewNote() {
         <option value={""}>--Notebook--</option>
         {notebookList.length > 0 &&
           notebookList.map(notebook => (
-            <option key={notebook.id} value={notebook.id}>
+            <option key={`nbList_${notebook.id} `}value={notebook.id}>
               {notebook.title}
             </option>
           ))}
