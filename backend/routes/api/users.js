@@ -232,7 +232,7 @@ router.patch(
 
     if (note) {
       const { title, content } = await req.body;
-      let notebookId = "";
+      let notebookId = null;
       if (await req.body.notebookId) {
         notebookId = await req.body.notebookId;
       }
