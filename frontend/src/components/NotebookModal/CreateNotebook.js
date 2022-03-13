@@ -59,8 +59,13 @@ function CreateNotebook({ props }) {
         />
       </label>
       <div className="form_btn_container">
-        <button type="submit" onClick={() => setSubmitClicked(true)}>
-          Create Notebook
+        <button
+          type="submit"
+          onClick={() => setSubmitClicked(true)}
+          style={{ width: "fit-content" }}
+        >
+          Create
+          <br /> Notebook
         </button>
         <button
           className="btn_cancel"
