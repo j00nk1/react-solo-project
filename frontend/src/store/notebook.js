@@ -13,21 +13,21 @@ const REMOVE_NOTEBOOK_STATE = "notes/removeNotebookState";
 const createNotebook = newNotebook => {
   return {
     type: CREATE_NOTEBOOK,
-    payload: newNotebook,
+    newNotebook,
   };
 };
 
 const loadNotebooks = notebooks => {
   return {
     type: LOAD_NOTEBOOKS,
-    payload: notebooks,
+    notebooks,
   };
 };
 
 const loadSingleNotebook = notebook => {
   return {
     type: LOAD_SINGLE_NOTEBOOK,
-    payload: notebook,
+    notebook,
   };
 };
 
@@ -64,8 +64,8 @@ export const fetchNotebooks =
     const res = await csrfFetch(`/api/users/${userId}/notebooks/`);
     if (res.ok) {
       const notebooks = await res.json();
-      await dispatch(loadNotebooks(notebooks.notebookList));
-      return notebooks.notebookList;
+      await dispatch(loadNotebooks(notebooks));
+      return notebooks;
     }
   };
 
@@ -87,11 +87,11 @@ export const fetchMainNotebook =
     const res = await csrfFetch(`/api/users/${userId}/notebooks/`);
     if (res.ok) {
       const notebooks = await res.json();
-      const mainNotebook = notebooks.mainNotebook;
-      dispatch(loadSingleNotebook(mainNotebook));
+      const mainNotebook = notebooks.filter(notebook => notebook.isMain);
       return mainNotebook;
     }
   };
+
 // // DELETE notebook
 export const deleteNotebook =
   ({ userId, notebookId }) =>
@@ -120,26 +120,26 @@ const notebookReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_NOTEBOOK:
       newState = { ...state };
-      newState.note = action.payload;
+      newState.note = action.notebook;
       return newState;
+
     case LOAD_NOTEBOOKS:
       const notebookList = {};
-      action.payload.forEach(
+      action.notebooks.forEach(
         notebook => (notebookList[notebook.id] = notebook)
       );
       return { ...notebookList, ...state };
+
     case LOAD_SINGLE_NOTEBOOK:
-      return {
-        ...state,
-        [action.payload.id]: {
-          ...state[action.payload.id],
-          ...action.payload,
-        },
-      };
+      newState = {};
+      newState[action.notebook.id] = action.notebook;
+      return { ...state, newState };
+
     case REMOVE_NOTEBOOK:
       newState = { ...state };
-      delete newState[action.payload];
+      delete newState[action.notebook.id];
       return newState;
+
     case REMOVE_NOTEBOOK_STATE:
       newState = Object.assign({}, state);
       newState = { notebook: null };

@@ -15,10 +15,6 @@ function NotebookChildren({ props }) {
     note => note?.notebookId === +notebookId
   );
 
-  // const notesFetch = dispatch(noteActions.fetchNotes({ userId, notebookId }));
-
-  // const notes = notesFetch();
-  // console.log("++++++++++++++++++++++++++", notes); // return Promise {<pending>}
   return (
     <>
       {matchingNotes.length > 0 && (

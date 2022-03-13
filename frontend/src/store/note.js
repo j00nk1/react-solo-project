@@ -11,31 +11,31 @@ const REMOVE_NOTE = "notes/removeNote";
 const REMOVE_STATE = "notes/removeState";
 
 // ---------------- Action Creators -----------
-const createNote = newNote => {
+const createNote = note => {
   return {
     type: CREATE_NOTE,
-    payload: newNote,
+    note,
   };
 };
 
 const loadNotes = notes => {
   return {
     type: LOAD_NOTES,
-    payload: notes,
+    notes,
   };
 };
 
 const loadSingleNote = note => {
   return {
     type: LOAD_SINGLE_NOTE,
-    payload: note,
+    note,
   };
 };
 
 const updateNote = note => {
   return {
     type: UPDATE_NOTE,
-    payload: note,
+    note,
   };
 };
 
@@ -56,7 +56,7 @@ const removeState = () => {
 // POST
 export const addNote = note => async dispatch => {
   const { userId, title, content } = note;
-  let notebookId = null;
+  let notebookId = "";
   if (note.notebookId) {
     notebookId = note.notebookId;
   }
@@ -65,7 +65,7 @@ export const addNote = note => async dispatch => {
     body: JSON.stringify({ title, content, notebookId }),
   });
   const data = await res.json();
-  dispatch(createNote(data.note));
+  dispatch(createNote(data));
   return data;
 };
 
@@ -97,7 +97,7 @@ export const fetchRecentNote =
     const res = await csrfFetch(`/api/users/${userId}/notes/`);
     if (res.ok) {
       const notes = await res.json();
-      const note = notes.notes[0];
+      const note = notes[0];
       dispatch(loadSingleNote(note));
       return note;
     }
@@ -118,7 +118,7 @@ export const fetchSingleNote =
 // UPDATE a note
 export const patchNote = note => async dispatch => {
   const { userId, id, title, content } = note;
-  let notebookId = null;
+  let notebookId = "";
   if (note.notebookId) {
     notebookId = note.notebookId;
   }
@@ -137,13 +137,14 @@ export const patchNote = note => async dispatch => {
 // DELETE note
 export const deleteNote = note => async dispatch => {
   const { userId, noteId } = note;
+
   const res = await csrfFetch(`/api/users/${userId}/notes/${noteId}`, {
     method: "DELETE",
   });
 
   const deletedNote = await res.json();
+
   dispatch(removeNote(deletedNote));
-  return deletedNote;
 };
 
 // Remove states when logout
@@ -160,34 +161,33 @@ const noteReducer = (state = initialState, action) => {
   switch (action.type) {
     case CREATE_NOTE:
       newState = { ...state };
-      newState.note = action.payload;
+      newState[action.note.id] = action.note;
       return newState;
+
     case LOAD_NOTES:
-      const noteList = {};
-      action.payload.notes.forEach(note => (noteList[note.id] = note));
-      return { ...noteList, ...state };
+      // TODO try delete the state
+      newState = { ...state };
+      if (!action.notes) return newState;
+      action.notes.forEach(note => (newState[note.id] = note));
+      return { ...state, ...newState };
+
     case LOAD_SINGLE_NOTE:
-      return {
-        ...state,
-        [action.payload.id]: {
-          ...state[action.payload.id],
-          ...action.payload,
-        },
-      };
+      newState = { ...state };
+      newState[action.note.id] = action.note;
+      return { ...state, ...newState };
+
     case UPDATE_NOTE:
-      return {
-        ...state,
-        [action.payload.id]: {
-          ...state[action.payload.id],
-          ...action.payload,
-        },
-      };
+      newState = { ...state };
+      newState[action.note.id] = action.note;
+      return newState;
+
     case REMOVE_NOTE:
       newState = { ...state };
-      delete newState[action.payload];
+      delete newState[action.note.id];
       return newState;
+
     case REMOVE_STATE:
-      newState = Object.assign({}, state);
+      newState = { ...state };
       newState = { note: null };
       return newState;
     default:
