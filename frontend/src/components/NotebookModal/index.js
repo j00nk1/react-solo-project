@@ -7,7 +7,7 @@ function NotebookModal() {
 
   return (
     <>
-      <button onClick={() => setShowModal(true)}>Log In</button>
+      <button onClick={() => setShowModal(true)}>Add Notebook</button>
       {showModal && (
         <Modal onClose={() => setShowModal(false)}>
           <CreateNotebook />

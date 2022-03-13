@@ -56,7 +56,7 @@ const removeState = () => {
 // POST
 export const addNote = note => async dispatch => {
   const { userId, title, content } = note;
-  let notebookId = "";
+  let notebookId = null;
   if (note.notebookId) {
     notebookId = note.notebookId;
   }
@@ -118,7 +118,7 @@ export const fetchSingleNote =
 // UPDATE a note
 export const patchNote = note => async dispatch => {
   const { userId, id, title, content } = note;
-  let notebookId = "";
+  let notebookId = null;
   if (note.notebookId) {
     notebookId = note.notebookId;
   }

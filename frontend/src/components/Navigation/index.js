@@ -42,14 +42,14 @@ function Navigation({ isLoaded }) {
             target="_blank"
             style={{ marginRight: 10 }}
           >
-            <i class="fa-brands fa-github"></i>
+            <i className="fa-brands fa-github"></i>
           </a>
           <a
             href="https://www.linkedin.com/in/junki-sato-7bb773208/"
             rel="noreferrer"
             target="_blank"
           >
-            <i class="fa-brands fa-linkedin"></i>
+            <i className="fa-brands fa-linkedin"></i>
           </a>
         </li>
         <ul className="nav_right_container">{isLoaded && sessionLinks}</ul>
