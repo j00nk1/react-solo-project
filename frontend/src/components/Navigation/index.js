@@ -35,6 +35,23 @@ function Navigation({ isLoaded }) {
             <img src={logo} alt="yen-logo" className="logo" />
           </NavLink>
         </li>
+        <li style={{ alignSelf: "center", fontSize: 20 }}>
+          <a
+            href="https://github.com/j00nk1"
+            rel="noreferrer"
+            target="_blank"
+            style={{ marginRight: 10 }}
+          >
+            <i className="fa-brands fa-github"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/junki-sato-7bb773208/"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <i className="fa-brands fa-linkedin"></i>
+          </a>
+        </li>
         <ul className="nav_right_container">{isLoaded && sessionLinks}</ul>
       </ul>
     </header>

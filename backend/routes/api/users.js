@@ -79,9 +79,7 @@ router.get(
       where: { userId },
     });
 
-    const mainNotebook = notebookList.filter(notebook => notebook.isMain)[0];
-
-    return res.json({ notebookList, mainNotebook });
+    return res.json(notebookList);
   })
 );
 
@@ -140,7 +138,7 @@ router.delete(
 
     if (notebook) {
       await notebook.destroy();
-      return res.json(`"${notebook.title}" has been Successfully deleted.`);
+      return res.json(notebook);
     } else {
       const error = new Error(
         "Something went wrong! We could not find the notebook..."
@@ -166,7 +164,7 @@ router.get(
     });
 
     // if (notes.length > 0) {
-    return res.json({ notes });
+    return res.json(notes);
     //   } else {
     //     const error = new Error("We could not find the notes");
     //     error.status = 404;
@@ -266,7 +264,7 @@ router.delete(
 
     if (note) {
       await note.destroy();
-      return res.json(`"${note.title}" has been Successfully deleted.`);
+      return res.json(note);
     } else {
       const error = new Error(
         "Something went wrong! We could not find the note..."
@@ -276,4 +274,45 @@ router.delete(
     }
   })
 );
+
+// -------- NOTEBOOKS/NOTES Routes /api/:userId/notebooks/:notebookId/notes/----------
+// READ all notes associated with a notebook
+router.get(
+  "/:userId/notebooks/:notebookId/notes",
+  asyncHandler(async (req, res, next) => {
+    const { userId, notebookId } = await req.params;
+
+    const notes = await Note.findOne({
+      where: {
+        userId,
+        notebookId,
+      },
+      order: [["updatedAt", "DESC"]],
+    });
+    return res.json(notes);
+  })
+);
+
+// // READ a note associated with a notebook (not necessary?)
+// router.get(
+//   "/:userId/notebooks/:notebookId/notes/:noteId",
+//   validateNote,
+//   asyncHandler(async (req, res, next) => {
+//     const { userId, notebookId,noteId } = await req.params;
+//     const note = await Note.findOne({
+//       where: { id: noteId, userId, notebookId },
+//     });
+
+//     if (note) {
+//       return res.json(note);
+//     } else {
+//       const error = new Error(
+//         "Something went wrong! We could not find the note..."
+//       );
+//       error.status = 404;
+//       next(error);
+//     }
+//   })
+// );
+
 module.exports = router;

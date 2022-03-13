@@ -1,23 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+
 import { useNotebookContext } from "../../context/NotebookContext";
+import { NotebookListMaker } from "./NotebookListMaker";
 import * as notebookActions from "../../store/notebook";
+import { Modal } from "../../context/Modal";
+import CreateNotebook from "../NotebookModal/CreateNotebook";
 
 function NotebookList({ props }) {
-  const { noteListPath, notebookListPath, username, id } = props;
+  // const { noteListPath, notebookListPath, username, id } = props;
+  // const history = useHistory();
   const userId = props.id;
-  const history = useHistory();
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
 
-  const {
-    selectedNotebook,
-    setSelectedNotebook,
-    notebookTitle,
-    setNotebookTitle,
-    notebookList,
-    setNotebookList,
-  } = useNotebookContext();
+  const { notebookList, setNotebookList } = useNotebookContext();
+
+  useEffect(() => {
+    const loadNotebook = async () => {
+      const notebooks = await dispatch(
+        notebookActions.fetchNotebooks({ userId })
+      );
+      await setNotebookList(notebooks);
+    };
+    loadNotebook();
+  }, [dispatch]);
 
   // const handleSubmit = async e => {
   //   e.preventDefault();
@@ -29,8 +36,20 @@ function NotebookList({ props }) {
   return (
     <>
       <h2 id="list_title">
-        <i className="fa-solid fa-book"></i> Notebook
+        <i className="fa-solid fa-book"></i> Notebooks
       </h2>
+      <button
+        style={{ borderRadius: 0, background: "steelblue", minHeight: "30px" }}
+        onClick={() => setShowModal(true)}
+      >
+        Add Notebook <i className="fa-solid fa-folder-plus"></i>
+      </button>
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <CreateNotebook props={setShowModal} />
+        </Modal>
+      )}
+      {NotebookListMaker(notebookList)}
     </>
   );
 }

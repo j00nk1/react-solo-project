@@ -8,33 +8,34 @@ const LOAD_NOTES = "notes/loadNotes";
 const LOAD_SINGLE_NOTE = "notes/loadSingleNote";
 const UPDATE_NOTE = "notes/updateNote";
 const REMOVE_NOTE = "notes/removeNote";
+const REMOVE_STATE = "notes/removeState";
 
 // ---------------- Action Creators -----------
-const createNote = newNote => {
+const createNote = note => {
   return {
     type: CREATE_NOTE,
-    payload: newNote,
+    note,
   };
 };
 
 const loadNotes = notes => {
   return {
     type: LOAD_NOTES,
-    payload: notes,
+    notes,
   };
 };
 
 const loadSingleNote = note => {
   return {
     type: LOAD_SINGLE_NOTE,
-    payload: note,
+    note,
   };
 };
 
 const updateNote = note => {
   return {
     type: UPDATE_NOTE,
-    payload: note,
+    note,
   };
 };
 
@@ -42,6 +43,12 @@ const removeNote = note => {
   return {
     type: REMOVE_NOTE,
     note,
+  };
+};
+
+const removeState = () => {
+  return {
+    type: REMOVE_STATE,
   };
 };
 
@@ -58,31 +65,39 @@ export const addNote = note => async dispatch => {
     body: JSON.stringify({ title, content, notebookId }),
   });
   const data = await res.json();
-  dispatch(createNote(data.note));
+  dispatch(createNote(data));
   return data;
 };
 
-// GET all notes
+// GET all notes OR notebook's notes
 export const fetchNotes =
-  ({ userId }) =>
+  ({ userId, notebookId }) =>
   async dispatch => {
-    const res = await csrfFetch(`/api/users/${userId}/notes/`);
+    let res;
+    if (notebookId)
+      res = await csrfFetch(
+        `/api/users/${userId}/notebooks/${notebookId}/notes`
+      );
+    else res = await csrfFetch(`/api/users/${userId}/notes/`);
+
     if (res.ok) {
       const notes = await res.json();
       dispatch(loadNotes(notes));
+
       return notes;
     } else {
       return;
     }
   };
 
+// GET the most recently updated note
 export const fetchRecentNote =
   ({ userId }) =>
   async dispatch => {
     const res = await csrfFetch(`/api/users/${userId}/notes/`);
     if (res.ok) {
       const notes = await res.json();
-      const note = notes.notes[0];
+      const note = notes[0];
       dispatch(loadSingleNote(note));
       return note;
     }
@@ -122,48 +137,58 @@ export const patchNote = note => async dispatch => {
 // DELETE note
 export const deleteNote = note => async dispatch => {
   const { userId, noteId } = note;
+
   const res = await csrfFetch(`/api/users/${userId}/notes/${noteId}`, {
     method: "DELETE",
   });
 
   const deletedNote = await res.json();
+
   dispatch(removeNote(deletedNote));
-  return deletedNote;
+};
+
+// Remove states when logout
+export const removeNoteState = () => dispatch => {
+  dispatch(removeState());
+  return;
 };
 
 // --------------- Reducer ----------------
-const initialState = { note: null };
+const initialState = {};
 
 const noteReducer = (state = initialState, action) => {
   let newState;
   switch (action.type) {
     case CREATE_NOTE:
       newState = { ...state };
-      newState.note = action.payload;
+      newState[action.note.id] = action.note;
       return newState;
+
     case LOAD_NOTES:
-      const noteList = {};
-      action.payload.notes.forEach(note => (noteList[note.id] = note));
-      return { ...noteList, ...state };
+      // TODO try delete the state
+      newState = { ...state };
+      if (!action.notes) return newState;
+      action.notes.forEach(note => (newState[note.id] = note));
+      return { ...state, ...newState };
+
     case LOAD_SINGLE_NOTE:
-      return {
-        ...state,
-        [action.payload.id]: {
-          ...state[action.payload.id],
-          ...action.payload,
-        },
-      };
+      newState = { ...state };
+      newState[action.note.id] = action.note;
+      return { ...state, ...newState };
+
     case UPDATE_NOTE:
-      return {
-        ...state,
-        [action.payload.id]: {
-          ...state[action.payload.id],
-          ...action.payload,
-        },
-      };
+      newState = { ...state };
+      newState[action.note.id] = action.note;
+      return newState;
+
     case REMOVE_NOTE:
       newState = { ...state };
-      delete newState[action.payload];
+      delete newState[action.note.id];
+      return newState;
+
+    case REMOVE_STATE:
+      newState = { ...state };
+      newState = { note: null };
       return newState;
     default:
       return state;

@@ -13,8 +13,11 @@ import NotebookList from "./NotebookList";
 import NoteList from "./NoteList";
 import NoteForm from "../NoteForm";
 import * as noteActions from "../../store/note";
+import * as notebookActions from "../../store/notebook";
+
 import "./UserHome.css";
 import RenderNote from "../NoteForm/RenderNote";
+import Landing from "../Landing";
 
 function UserHome() {
   const [selected, setSelected] = useState("");
@@ -41,6 +44,8 @@ function UserHome() {
 
     if (id !== +userId)
       throw new Error("You are not authorized to see this page");
+    dispatch(noteActions.fetchNotes({ userId }));
+    dispatch(notebookActions.fetchNotebooks({ userId }));
   } catch (e) {
     console.error(e);
 
@@ -66,7 +71,7 @@ function UserHome() {
     e.preventDefault();
     setSelected("noteForm");
     const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-    setNotes(noteList.notes);
+    setNotes(noteList);
     setShowNote(true);
     setShowNotebook(false);
     history.push(`${noteListPath}/new`);
@@ -76,11 +81,11 @@ function UserHome() {
     e.preventDefault();
     setSelected("renderNote");
     const noteList = await dispatch(noteActions.fetchNotes({ userId }));
-    setNotes(noteList.notes);
+    setNotes(noteList);
 
     setShowNote(true);
     setShowNotebook(false);
-    const keys = Object.keys(noteList.notes);
+    const keys = Object.keys(noteList);
     if (!keys.length) return history.push(`${noteListPath}/new`);
     const recentNote = await dispatch(noteActions.fetchRecentNote({ userId }));
     setRenderNote(recentNote);
@@ -140,9 +145,7 @@ function UserHome() {
       {!selected && (
         <>
           <Redirect to={`/users/${userId}`}></Redirect>
-          <h1 style={{ margin: "0 auto", paddingTop: "20px" }}>
-            Welcome back {username}!
-          </h1>
+          <Landing />
         </>
       )}
       {selected && (
@@ -159,7 +162,6 @@ function UserHome() {
           {/* {selected === "renderNote" && <RenderNote />} */}
           {/* If there is no note, render "Create a Note" */}
           {/* If there is, render the note in the top of the list*/}
-          {selected === "renderNotebook" && <div> render notebook</div>}
         </div>
       )}
 

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 import * as sessionActions from "../../store/session";
+
 import "./SignupForm.css";
 
 function SignupFormPage() {
@@ -34,7 +35,7 @@ function SignupFormPage() {
 
   const demoLogin = e => {
     e.preventDefault();
-    return dispatch(
+    dispatch(
       sessionActions.login({
         credential: "Demo-User",
         password: "password",
@@ -46,7 +47,7 @@ function SignupFormPage() {
     <form className="main signup_form" onSubmit={handleSubmit}>
       <ul className="error">
         {errors.map((error, idx) => (
-          <li key={idx}>{error}</li>
+          <li key={`err_${idx}`}>{error}</li>
         ))}
       </ul>
       <label>
@@ -54,6 +55,7 @@ function SignupFormPage() {
         <input
           type="text"
           value={email}
+          placeholder="email"
           onChange={e => setEmail(e.target.value)}
           required
         />
@@ -64,6 +66,7 @@ function SignupFormPage() {
           type="text"
           value={username}
           onChange={e => setUsername(e.target.value)}
+          placeholder="username"
           required
         />
       </label>
@@ -73,6 +76,7 @@ function SignupFormPage() {
           type="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
+          placeholder="password"
           required
         />
       </label>
@@ -82,6 +86,7 @@ function SignupFormPage() {
           type="password"
           value={confirmPassword}
           onChange={e => setConfirmPassword(e.target.value)}
+          placeholder="confirm password"
           required
         />
       </label>
