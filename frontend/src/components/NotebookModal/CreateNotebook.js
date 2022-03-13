@@ -54,6 +54,7 @@ function CreateNotebook({ props }) {
           type="text"
           value={title}
           onChange={e => setTitle(e.target.value)}
+          placeholder="notebook title"
           required
         />
       </label>
