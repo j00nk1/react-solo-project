@@ -88,7 +88,6 @@ export const fetchMainNotebook =
     if (res.ok) {
       const notebooks = await res.json();
       const mainNotebook = notebooks.filter(notebook => notebook.isMain);
-      console.log(mainNotebook);
       return mainNotebook;
     }
   };

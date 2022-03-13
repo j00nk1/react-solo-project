@@ -17,6 +17,7 @@ import * as notebookActions from "../../store/notebook";
 
 import "./UserHome.css";
 import RenderNote from "../NoteForm/RenderNote";
+import Landing from "../Landing";
 
 function UserHome() {
   const [selected, setSelected] = useState("");
@@ -144,9 +145,7 @@ function UserHome() {
       {!selected && (
         <>
           <Redirect to={`/users/${userId}`}></Redirect>
-          <h1 style={{ margin: "0 auto", paddingTop: "20px" }}>
-            Welcome back {username}!
-          </h1>
+          <Landing />
         </>
       )}
       {selected && (

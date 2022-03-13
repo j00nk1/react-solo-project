@@ -13,6 +13,11 @@ border color #91c1e5
   margin: 0 10px;
 }
 
+.nav_center {
+  align-self: center;
+  background-color: lightcoral;
+}
+
 .nav_right > ul {
   align-self: center;
 }

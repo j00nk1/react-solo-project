@@ -5,7 +5,13 @@ import yen from "../Navigation/images/yen-logo.png";
 function Landing() {
   return (
     <>
-      <h1 style={{ fontFamily: "serif" }}>
+      <h1
+        style={{
+          margin: "0 auto",
+          paddingTop: "20px",
+          fontFamily: "serif",
+        }}
+      >
         Welcome to
         <img
           src={yen}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
 
 import { useListContext } from "../../context/ListContexts";
@@ -46,7 +46,6 @@ function RenderNote() {
   useEffect(() => {
     setTitle(renderNote.title);
     setContent(renderNote.content);
-    console.log("in useEffect", title, renderNote.notebookId);
     if (!renderNote.notebookId) setSelectedNotebook("");
     else setSelectedNotebook(renderNote.notebookId);
   }, [renderNote]);
