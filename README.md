@@ -1,6 +1,6 @@
 # You Ever Note
 
-![yen-logo](frontend\src\components\Navigation\images\yen-logo.png)
+![yen-logo](/rontend/src/components/Navigation/images/yen-logo.png)
 
 ## About The Project
 
